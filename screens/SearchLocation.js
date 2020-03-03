@@ -42,11 +42,13 @@ class SearchLocation extends React.Component {
   }
 
   handleGetCurrentLocation() {
-    const region = this.state.currentAddress[0].region;
-    const country = this.state.currentAddress[0].country;
-    this.setState({
-      locationInput: `${region}, ${country}`
-    })
+    if(this.state.currentAddress){
+      const region = this.state.currentAddress[0].region;
+      const country = this.state.currentAddress[0].country;
+      this.setState({
+        locationInput: `${region}, ${country}`
+      })
+    }
   }
 
   handleInputChange(value) {

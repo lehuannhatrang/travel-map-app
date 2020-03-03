@@ -5,8 +5,9 @@ import { Asset } from 'expo-asset';
 import { Block, GalioProvider } from 'galio-framework';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
-
-import Screens from './navigation/Screens';
+import HttpUtils from './utils/Http.util';
+import Constants from 'expo-constants';
+import {AppContainer, AuthorizeContainer} from './navigation/Screens';
 import { Images, articles, argonTheme } from './constants';
 
 // cache app images
@@ -34,16 +35,74 @@ function cacheImages(images) {
 }
 
 export default class App extends React.Component {
-  state = {
-    isLoadingComplete: false,
-    location: null,
-    errorMessage: null,
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoadingComplete: false,
+      location: null,
+      errorMessage: null,
+      isAuthorized: false
+    }
+    this.checkLogin()
+  }
+
+  checkLogin() {
+    if(!this.state.isAuthorized) {
+      AsyncStorage.getItem('accessToken')
+      .then(accessToken => {
+        console.log(accessToken)
+        if(!accessToken) return this.setState({isAuthorized: false});
+        HttpUtils.getJsonAuthorization('/isLogin') 
+        .then(response => {
+          if(response.isLogin) this.setState({isAuthorized: true})
+          else AsyncStorage.getItem('accessToken')
+        })
+        .catch(err => {})
+      })
+      .catch(err => console.log('err:', err))
+    }
+    setInterval(() => {
+      if(!this.state.isAuthorized) {
+        AsyncStorage.getItem('accessToken')
+        .then(accessToken => {
+          console.log(accessToken)
+          if(!accessToken) return this.setState({isAuthorized: false});
+          HttpUtils.getJsonAuthorization('/isLogin') 
+          .then(response => {
+            if(response.isLogin) this.setState({isAuthorized: true})
+            else this.setState({isAuthorized: false})
+          })
+          .catch(err => {})
+        })
+        .catch(err => console.log('err:', err))
+      }
+    }, 2000);
+  }
+
+  componentDidMount() {
+  }
+
+  componentWillReceiveProps(nextProps) {
+    AsyncStorage.getItem('accessToken')
+    .then(accessToken => {
+      console.log(accessToken)
+      if(!accessToken) return this.setState({isAuthorized: false});
+
+      HttpUtils.getJsonAuthorization('/isLogin') 
+      .then(response => {
+        if(response.data && response.data.isLogin) this.setState({isAuthorized: true})
+      })
+      .catch(err => {})
+    })
+    .catch(err => console.log('err:', err))
   }
 
   componentWillMount() {
     if (Platform.OS === 'android' && !Constants.isDevice) {
+      const errorMessage = 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!'
+      console.log(errorMessage)
       this.setState({
-        errorMessage: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
+        errorMessage
       });
     } else {
       this._getLocationAsync();
@@ -82,7 +141,8 @@ export default class App extends React.Component {
       return (
         <GalioProvider theme={argonTheme}>
           <Block flex>
-            <Screens />
+            {this.state.isAuthorized && <AppContainer />}
+            {!this.state.isAuthorized && <AuthorizeContainer/>}
           </Block>
         </GalioProvider>
       );

@@ -52,7 +52,7 @@ class Onboarding extends React.Component {
                 <Button
                   style={styles.button}
                   color={argonTheme.COLORS.SECONDARY}
-                  onPress={() => navigation.navigate("Home")}
+                  onPress={() => navigation.navigate("Account")}
                   textStyle={{ color: argonTheme.COLORS.PRIMARY }}
                 >
                   Let's travel

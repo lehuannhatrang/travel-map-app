@@ -5,6 +5,7 @@ import { StyleSheet, Dimensions, Image, TouchableWithoutFeedback } from 'react-n
 import { Block, Text, theme } from 'galio-framework';
 
 import { argonTheme } from '../constants';
+import Icon from './Icon';
 
 
 class Card extends React.Component {
@@ -32,8 +33,24 @@ class Card extends React.Component {
         </TouchableWithoutFeedback>}
         <TouchableWithoutFeedback onPress={() => this.props.onPress()}>
           <Block flex space="between" style={styles.cardDescription}>
-            <Text size={14} style={styles.cardTitle}>{item.title}</Text>
-            {item.cta && <Text size={12} muted={!ctaColor} color={ctaColor || argonTheme.COLORS.ACTIVE} bold>{item.cta}</Text>}
+
+            <Text size={14} style={styles.cardTitle} color={argonTheme.COLORS.ACTIVE} bold numberOfLines={1}>{item.title}</Text>
+
+            {item.ratingPoint && <Text size={12}  style={{flex: 1}}> 
+              <Icon
+                size={14}
+                style={{marginRight: 10}}
+                color={'#e6e600'}
+                name="star"
+                family="AntDesign"
+              /> 
+              {item.ratingPoint}
+            </Text>}
+
+            {item.address && <Text size={12}  style={{flex: 1}} numberOfLines={1}>{item.address}</Text>}
+
+            {item.distance && <Text size={12} muted={!ctaColor} color={ctaColor || argonTheme.COLORS.MUTED}>{item.distance}</Text>}
+
           </Block>
         </TouchableWithoutFeedback>
       </Block>
@@ -60,7 +77,6 @@ const styles = StyleSheet.create({
   cardTitle: {
     flex: 1,
     flexWrap: 'wrap',
-    paddingBottom: 6
   },
   cardDescription: {
     padding: theme.SIZES.BASE / 2

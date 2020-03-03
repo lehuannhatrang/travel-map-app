@@ -13,13 +13,16 @@ import Home from "../screens/Home";
 import Onboarding from "../screens/Onboarding";
 import Pro from "../screens/Pro";
 import Profile from "../screens/Profile";
-import Register from "../screens/Register";
+import Register from "../screens/Login/Register";
 import Elements from "../screens/Elements";
 import Articles from "../screens/Articles";
 import SearchLocation from "../screens/SearchLocation";
+import LoginWithEmail from "../screens/Login/EmailLogin";
+import PlaceDetail from "../screens/PlaceDetail";
 // drawer
 import Menu from "./Menu";
 import DrawerItem from "../components/DrawerItem";
+import Categories from "../constants/categories";
 
 // header for screens
 import Header from "../components/Header";
@@ -113,7 +116,16 @@ const HomeStack = createStackNavigator(
     Home: {
       screen: Home,
       navigationOptions: ({ navigation }) => ({
-        header: <Header search options title="Home" navigation={navigation} />
+        header: <Header tabs={Categories} search options title="Home" navigation={navigation} />
+      })
+    },
+    PlaceDetail: {
+      screen: PlaceDetail,
+      navigationOptions: ({ navigation }) => ({
+        header: (
+          <Header white transparent title="Detail" iconColor={'#FFF'} navigation={navigation} />
+        ),
+        headerTransparent: true
       })
     },
     Pro: {
@@ -139,15 +151,44 @@ const HomeStack = createStackNavigator(
     transitionConfig
   }
 );
+const AccountStack = createStackNavigator(
+  {
+    Register: {
+      screen: Register,
+      navigationOptions: {
+        header: null
+      }
+    },
+    LoginWithEmail: {
+      screen: LoginWithEmail,
+      navigationOptions: {
+        header: null
+      }
+    }
+  }
+)
+
+// const PlaceDetailStack = createStackNavigator(
+//   {
+//     PlaceDetail: {
+//       screen: PlaceDetail,
+//       navigationOptions: ({ navigation }) => ({
+//         header: (
+//           <Header white transparent title="Detail" iconColor={'#FFF'} navigation={navigation} />
+//         ),
+//         headerTransparent: true
+//       })
+//     }
+//   },
+//   {
+//     cardStyle: { backgroundColor: "#FFFFFF" },
+//     transitionConfig
+//   }
+// );
+
 // divideru se baga ca si cum ar fi un ecrna dar nu-i nimic duh
 const AppStack = createDrawerNavigator(
   {
-    Onboarding: {
-      screen: Onboarding,
-      navigationOptions: {
-        drawerLabel: () => {}
-      }
-    },
     Home: {
       screen: HomeStack,
       navigationOptions: navOpt => ({
@@ -161,14 +202,6 @@ const AppStack = createDrawerNavigator(
       navigationOptions: navOpt => ({
         drawerLabel: ({ focused }) => (
           <DrawerItem focused={focused} screen="Profile" title="Profile" />
-        )
-      })
-    },
-    Account: {
-      screen: Register,
-      navigationOptions: navOpt => ({
-        drawerLabel: ({ focused }) => (
-          <DrawerItem focused={focused} screen="Register" title="Account" />
         )
       })
     },
@@ -192,5 +225,24 @@ const AppStack = createDrawerNavigator(
   Menu
 );
 
+const AuthorizeStack = createStackNavigator(
+  {
+    Onboarding: {
+      screen: Onboarding,
+      navigationOptions: {
+        header: null,
+      },
+    },
+    Account: {
+      screen: AccountStack,
+      navigationOptions: {
+        header: null,
+      },
+    }
+  },
+  Menu
+)
+
 const AppContainer = createAppContainer(AppStack);
-export default AppContainer;
+const AuthorizeContainer = createAppContainer(AuthorizeStack)
+export {AppContainer, AuthorizeContainer};
