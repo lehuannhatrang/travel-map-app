@@ -122,10 +122,8 @@ const HomeStack = createStackNavigator(
     PlaceDetail: {
       screen: PlaceDetail,
       navigationOptions: ({ navigation }) => ({
-        header: (
-          <Header white transparent title="Detail" iconColor={'#FFF'} navigation={navigation} />
-        ),
-        headerTransparent: true
+        header: null
+        // headerTransparent: true
       })
     },
     Pro: {

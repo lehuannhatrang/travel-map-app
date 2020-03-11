@@ -9,6 +9,7 @@ import HttpUtils from './utils/Http.util';
 import Constants from 'expo-constants';
 import {AppContainer, AuthorizeContainer} from './navigation/Screens';
 import { Images, articles, argonTheme } from './constants';
+import { getDistance, getPreciseDistance } from 'geolib';
 
 // cache app images
 const assetImages = [
@@ -50,14 +51,15 @@ export default class App extends React.Component {
     if(!this.state.isAuthorized) {
       AsyncStorage.getItem('accessToken')
       .then(accessToken => {
-        console.log(accessToken)
+        // console.log(accessToken)
         if(!accessToken) return this.setState({isAuthorized: false});
         HttpUtils.getJsonAuthorization('/isLogin') 
         .then(response => {
+          // console.log(response)
           if(response.isLogin) this.setState({isAuthorized: true})
           else AsyncStorage.getItem('accessToken')
         })
-        .catch(err => {})
+        .catch(err => {console.log(err)})
       })
       .catch(err => console.log('err:', err))
     }
@@ -65,7 +67,7 @@ export default class App extends React.Component {
       if(!this.state.isAuthorized) {
         AsyncStorage.getItem('accessToken')
         .then(accessToken => {
-          console.log(accessToken)
+          // console.log(accessToken)
           if(!accessToken) return this.setState({isAuthorized: false});
           HttpUtils.getJsonAuthorization('/isLogin') 
           .then(response => {
@@ -80,6 +82,12 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
+
+    Location.geocodeAsync('497 Hòa Hảo, Phường 7, Quận 10, HCM')
+    .then(result => {
+      // console.log('dia chi', result)
+    })
+
   }
 
   componentWillReceiveProps(nextProps) {

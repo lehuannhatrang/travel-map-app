@@ -9,7 +9,8 @@ import {
   TouchableOpacity,
   View,
   TouchableWithoutFeedback,
-  Modal
+  Modal,
+  ActivityIndicator
 } from "react-native";
 import { Block, Text, theme } from "galio-framework";
 import ImageViewer from 'react-native-image-view';
@@ -23,6 +24,7 @@ const { width, height } = Dimensions.get("screen");
 const cardWidth = width - theme.SIZES.BASE * 2;
 
 const thumbMeasure = (width - 48 - 32) / 3;
+
 
 class PlaceDetail extends React.Component {
     constructor(props) {
@@ -72,7 +74,17 @@ class PlaceDetail extends React.Component {
             HttpUtil.getJsonAuthorization('/places/detail', {id: placeId})
             .then(result => {
                 console.log(result.place)
-                this.setState({placeDetail: result.place})
+                this.setState({
+                    placeDetail: result.place,
+                    images: result.place.pictures.map(pictureUri => ({
+                        source: {
+                            uri: pictureUri,
+                        },
+                        title: result.place.name,
+                        width: 806,
+                        height: 720,
+                    }))
+                })
             })
             .catch(err => {
                 navigation.navigate('Home', {})
@@ -95,8 +107,7 @@ class PlaceDetail extends React.Component {
 
     render() {
         const { showPicture, images, chosenPicture, comments, placeDetail } = this.state;
-
-        if (!placeDetail) return <></>
+        if (!placeDetail) return <ActivityIndicator size="large" color="#0000ff" style={{marginTop: 100}} />
         return (
         <Block flex style={styles.profile}>
             <ImageViewer images={images}
@@ -113,7 +124,7 @@ class PlaceDetail extends React.Component {
             >
                 <ScrollView
                 showsVerticalScrollIndicator={false}
-                style={{ width, marginTop: '40%' }}
+                style={{ width, marginTop: '15%' }}
                 >
                 <Block flex style={styles.profileCard}>
                     <Block style={styles.titleInfo}>
@@ -136,34 +147,34 @@ class PlaceDetail extends React.Component {
                         <Block row space="between">
                             <Block middle>
                                 <Text bold size={12} color="#525F7F" style={{ marginBottom: 4 }}>
-                                    5.1
+                                    {placeDetail.spaceRating}
                                 </Text>
                                 <Text size={12}>Space</Text>
 
                             </Block>
                             <Block middle>
                                 <Text bold size={12} color="#525F7F" style={{ marginBottom: 4 }}>
-                                    7
+                                    {placeDetail.locationRating}
                                 </Text>
                                 <Text size={12}>Location</Text>
                             </Block>
 
                             <Block middle>
                                 <Text bold size={12} color="#525F7F" style={{ marginBottom: 4 }}>
-                                    4
+                                    {placeDetail.qualityRating}
                                 </Text>
                                 <Text size={12}>Quality</Text>
                             </Block>
 
                             <Block middle>
                             <   Text bold size={12} color="#525F7F" style={{ marginBottom: 4 }}>   
-                                    9
+                                    {placeDetail.serviceRating}
                                 </Text>
                                 <Text size={12}>Service</Text>
                             </Block>
                             <Block middle>
                                 <Text bold size={12} color="#525F7F" style={{ marginBottom: 4 }}>
-                                    8.5
+                                    {placeDetail.priceRating}
                                 </Text>
                                 <Text size={12}>Price</Text>
                             </Block>
@@ -179,7 +190,7 @@ class PlaceDetail extends React.Component {
                             name="staro"
                             color="#e6e600"
                             />
-                            <Text bold style={{position: 'absolute', color: '#525F7F'}}>5.2</Text>
+                            <Text bold style={{position: 'absolute', color: '#525F7F'}}>{placeDetail.avgRating}</Text>
                         </Block>
 
                         <Block
@@ -210,10 +221,10 @@ class PlaceDetail extends React.Component {
                         </Block>
                         <Block style={{ paddingBottom: -HeaderHeight * 2 }}>
                             <Block row space="between" style={{ flexWrap: "wrap" }}>
-                            {Images.Viewed.map((img, imgIndex) => (
-                                <TouchableOpacity key={`viewed-${img}`} onPress={()=> this.setState({showPicture: true, chosenPicture: img})}>
+                            {images.map((img, imgIndex) => (
+                                <TouchableOpacity key={`viewed-${imgIndex}`} onPress={()=> this.setState({showPicture: true, chosenPicture: img.source.uri})}>
                                 <Image
-                                source={{ uri: img }}
+                                source={{ uri: img.source.uri }}
                                 resizeMode="cover"
                                 style={styles.thumb}
                                 />
@@ -235,7 +246,7 @@ const styles = StyleSheet.create({
     profile: {
         marginTop: Platform.OS === "android" ? -HeaderHeight : 0,
         // marginBottom: -HeaderHeight * 2,
-        flex: 1
+        flex: 1,
     },
     profileContainer: {
         width: width,
@@ -251,7 +262,7 @@ const styles = StyleSheet.create({
         // position: "relative",
         padding: theme.SIZES.BASE,
         marginHorizontal: theme.SIZES.BASE,
-        marginTop: 65,
+        marginTop: 175,
         borderTopLeftRadius: 6,
         borderTopRightRadius: 6,
         backgroundColor: theme.COLORS.WHITE,

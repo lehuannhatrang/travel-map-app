@@ -91,9 +91,10 @@ class Register extends React.Component {
         phone,
         password
       }
-
+      console.log('sending')
       HttpUtil.postJson('/auth/signup', userInfo)
       .then(response => {
+        console.log(responsee)
         if(!!response.userId) {
           this.setState({
             // isLoading: false,
@@ -106,6 +107,7 @@ class Register extends React.Component {
       })
       .catch(error => {
         this.setState({isLoading: false})
+        console.log(error)
       })
     }
   }
