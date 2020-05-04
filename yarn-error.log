@@ -1,5 +1,5 @@
 Arguments: 
-  /home/lap11735/.nvm/versions/node/v13.0.1/bin/node /usr/share/yarn/bin/yarn.js add react-native-image-view
+  /home/lap11735/.nvm/versions/node/v13.0.1/bin/node /usr/share/yarn/bin/yarn.js add react-native-maps@~0.25.0
 
 PATH: 
   /home/lap11735/.nvm/versions/node/v13.0.1/bin:/home/lap11735/.rbenv/plugins/ruby-build/bin:/home/lap11735/.rbenv/shims:/home/lap11735/.rbenv/bin:/home/lap11735/.npm-global/bin:/home/lap11735/.local/share/umake/bin:/home/lap11735/bin:/home/lap11735/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/lap11735/Android/Sdk/emulator:/home/lap11735/Android/Sdk/tools:/home/lap11735/Android/Sdk/tools/bin:/home/lap11735/Android/Sdk/platform-tools:/home/lap11735/Android/Sdk/emulator:/home/lap11735/Android/Sdk/tools:/home/lap11735/Android/Sdk/tools/bin:/home/lap11735/Android/Sdk/platform-tools
@@ -14,7 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  Error: EACCES: permission denied, unlink '/home/lap11735/Huan/thesis/travel-map/travel-map-app/node_modules/.bin/atob'
+  Error: EACCES: permission denied, unlink '/home/lap11735/Huan/thesis/travel-map/travel-map-app/node_modules/geolib/CHANGELOG.md'
 
 npm manifest: 
   {
@@ -38,14 +38,17 @@ npm manifest:
       "expo-asset": "~7.0.0",
       "expo-font": "~7.0.0",
       "galio-framework": "^0.6.3",
+      "geolib": "^3.2.1",
       "prop-types": "^15.7.2",
       "q": "^1.5.1",
       "react": "16.8.3",
       "react-native": "https://github.com/expo/react-native/archive/sdk-35.0.0.tar.gz",
       "react-native-gesture-handler": "~1.3.0",
+      "react-native-image-view": "^2.1.9",
       "react-native-image-viewer": "^0.0.3",
       "react-native-keyboard-aware-scroll-view": "^0.9.1",
       "react-native-modal-dropdown": "^0.6.2",
+      "react-native-slider": "^0.11.0",
       "react-navigation": "^3.11.0"
     },
     "devDependencies": {
@@ -2460,6 +2463,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/gensync/-/gensync-1.0.0-beta.1.tgz#58f4361ff987e5ff6e1e7a210827aa371eaac269"
     integrity sha512-r8EC6NO1sngH/zdD9fiRDLdcgnbayXah+mLgManTaIZJqEC1MZstmnox8KpnI2/fxQwrp5OpCOYWLp4rBl4Jcg==
   
+  geolib@^3.2.1:
+    version "3.2.1"
+    resolved "https://registry.yarnpkg.com/geolib/-/geolib-3.2.1.tgz#1d7c6e7106eddc10445ba2038550aab63d6e4fa4"
+    integrity sha512-O9nD8iSD4VimupKak8bKySLkkWI5VWetxIXsU7jmJRXxBFRR9LxSXGfTomtcHJLSRiznx+YHXHTOIVq4qgQmPw==
+  
   get-caller-file@^1.0.1:
     version "1.0.3"
     resolved "https://registry.yarnpkg.com/get-caller-file/-/get-caller-file-1.0.3.tgz#f978fa4c90d1dfe7ff2d6beda2a515e713bdcf4a"
@@ -4097,7 +4105,7 @@ Lockfile:
     dependencies:
       asap "~2.0.3"
   
-  prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
+  prop-types@^15.5.10, prop-types@^15.5.6, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
     version "15.7.2"
     resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
     integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -4199,6 +4207,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/react-native-image-progress/-/react-native-image-progress-0.6.0.tgz#14614add12beaa247a052e5a52e6a9fee0fb8c67"
     integrity sha1-FGFK3RK+qiR6BS5aUuap/uD7jGc=
   
+  react-native-image-view@^2.1.9:
+    version "2.1.9"
+    resolved "https://registry.yarnpkg.com/react-native-image-view/-/react-native-image-view-2.1.9.tgz#635306360c42ad2479f364161c47d2557f9240fd"
+    integrity sha512-+DA/+tLM7KHaLs41Hdd+m5UpGX2qtEdMamMZCsXCsJ5J6RwWrqBXQrGVB9Op7dIkZW2DDRVKZTP/FuSNEGtzJg==
+  
   react-native-image-viewer@^0.0.3:
     version "0.0.3"
     resolved "https://registry.yarnpkg.com/react-native-image-viewer/-/react-native-image-viewer-0.0.3.tgz#312266f173ae4362c2da318094163358d8862037"
@@ -4239,6 +4252,13 @@ Lockfile:
     integrity sha512-tOxHGQUN83MTmQB4ghoQkibqOdGiX4JQEmeyEv96MKWO/x8T2PJv84ECUos9hD3blPRQwVwSpAid1PPPhrVEaw==
     dependencies:
       debounce "^1.2.0"
+  
+  react-native-slider@^0.11.0:
+    version "0.11.0"
+    resolved "https://registry.yarnpkg.com/react-native-slider/-/react-native-slider-0.11.0.tgz#b68a0bc43c8422b24cd57947cc5ac2bcdb58fadc"
+    integrity sha512-jV9K87eu9uWr0uJIyrSpBLnCKvVlOySC2wynq9TFCdV9oGgjt7Niq8Q1A8R8v+5GHsuBw/s8vEj1AAkkUi+u+w==
+    dependencies:
+      prop-types "^15.5.6"
   
   react-native-tab-view@^1.2.0, react-native-tab-view@^1.4.1:
     version "1.4.1"

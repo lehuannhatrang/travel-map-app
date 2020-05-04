@@ -23,7 +23,11 @@ import PlaceDetail from "../screens/PlaceDetail";
 import Menu from "./Menu";
 import DrawerItem from "../components/DrawerItem";
 import Categories from "../constants/categories";
-
+import RatingForm from "../screens/PlaceDetail/ratingForm";
+import SelectLanguage from "../screens/SelectLanguage";
+import TripRoute from "../screens/TripRoute";
+import ViewOnMap from "../screens/PlaceDetail/viewOnMap";
+import i18n from "i18n-js";
 // header for screens
 import Header from "../components/Header";
 
@@ -116,7 +120,7 @@ const HomeStack = createStackNavigator(
     Home: {
       screen: Home,
       navigationOptions: ({ navigation }) => ({
-        header: <Header tabs={Categories} search options title="Home" navigation={navigation} />
+        header: <Header tabs={Categories} search options title={i18n.t('header.home.title')} navigation={navigation} />
       })
     },
     PlaceDetail: {
@@ -124,6 +128,22 @@ const HomeStack = createStackNavigator(
       navigationOptions: ({ navigation }) => ({
         header: null
         // headerTransparent: true
+      })
+    },
+    ViewOnMap: {
+      screen: ViewOnMap,
+      navigationOptions: ({ navigation }) => ({
+        header: null
+        // headerTransparent: true
+      })
+    },
+    RatingForm: {
+      screen: RatingForm,
+      navigationOptions: ({ navigation }) => ({
+        drawerLabel: ({ focused }) => (
+          <DrawerItem focused={focused} screen="RatingForm" title={i18n.t('header.ratingForm')} />
+        ),
+        header: <Header options title={i18n.t('header.ratingForm')} navigation={navigation} />
       })
     },
     Pro: {
@@ -166,6 +186,36 @@ const AccountStack = createStackNavigator(
   }
 )
 
+
+const SelectLanguageStack = createStackNavigator({
+  SelectLanguage: {
+    screen: SelectLanguage,
+    navigationOptions: ({ navigation }) => ({
+      header: <Header title={i18n.t('header.Language')} navigation={navigation} />
+    })
+  }
+},{
+  cardStyle: {
+    backgroundColor: "#F8F9FE"
+  },
+  transitionConfig
+});
+
+
+const TripRouteStack = createStackNavigator({
+  SelectLanguage: {
+    screen: TripRoute,
+    navigationOptions: ({ navigation }) => ({
+      header: <Header title={i18n.t('header.TripRoute')} navigation={navigation} />
+    })
+  }
+},{
+  cardStyle: {
+    backgroundColor: "#F8F9FE"
+  },
+  transitionConfig
+});
+
 // const PlaceDetailStack = createStackNavigator(
 //   {
 //     PlaceDetail: {
@@ -191,10 +241,26 @@ const AppStack = createDrawerNavigator(
       screen: HomeStack,
       navigationOptions: navOpt => ({
         drawerLabel: ({ focused }) => (
-          <DrawerItem focused={focused} title="Home" />
+          <DrawerItem focused={focused} title={i18n.t('navigationBar.Home')} />
         )
       })
     },
+    TripRoute: {
+      screen: TripRouteStack,
+      navigationOptions: navOpt => ({
+        drawerLabel: ({ focused }) => (
+          <DrawerItem focused={focused} screen="TripRoute" title={i18n.t('navigationBar.TripRoute')} />
+        )
+      })
+    },  
+    // TripRoute: {
+    //   screen: TripRouteStack,
+    //   navigationOptions: navOpt => ({
+    //     drawerLabel: ({ focused }) => (
+    //       <DrawerItem focused={focused} screen="TripRoute" title={i18n.t('navigationBar.TripRoute')} />
+    //     )
+    //   })
+    // },
     Profile: {
       screen: ProfileStack,
       navigationOptions: navOpt => ({
@@ -218,7 +284,15 @@ const AppStack = createDrawerNavigator(
           <DrawerItem focused={focused} screen="Articles" title="Articles" />
         )
       })
-    }
+    },
+    Language: {
+      screen: SelectLanguageStack,
+      navigationOptions: navOpt => ({
+        drawerLabel: ({ focused }) => (
+          <DrawerItem focused={focused} screen="Language" title={i18n.t('navigationBar.Language')} />
+        )
+      })
+    },
   },
   Menu
 );

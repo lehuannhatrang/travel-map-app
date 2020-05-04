@@ -9,6 +9,7 @@ const ArgonLogo = require("../assets/imgs/argonlogo.png");
 const iOSLogo = require("../assets/imgs/ios.png");
 const androidLogo = require("../assets/imgs/android.png");
 const FoodyLogo = require("../assets/imgs/foody_logo.png")
+const VietNamFlag = require("../assets/imgs/VietNamFlag.png")
 // internet imgs
 
 const ProfilePicture = 'https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?fit=crop&w=1650&q=80';
@@ -40,5 +41,6 @@ export default {
   ArgonLogo,
   iOSLogo,
   androidLogo,
-  FoodyLogo
+  FoodyLogo,
+  VietNamFlag
 };

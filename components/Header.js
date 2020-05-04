@@ -6,6 +6,7 @@ import { Button, Block, NavBar, Text, theme } from 'galio-framework';
 import Icon from './Icon';
 import Input from './Input';
 import Tabs from './Tabs';
+import i18n from 'i18n-js';
 import argonTheme from '../constants/Theme';
 
 const { height, width } = Dimensions.get('window');
@@ -64,7 +65,7 @@ class Header extends React.Component {
     switch (routeName) {
       case 'Home':
         return ([
-          <BellButton key='chat-home' navigation={navigation} isWhite={white} />,
+          // <BellButton key='chat-home' navigation={navigation} isWhite={white} />,
           // <BasketButton key='basket-home' navigation={navigation} isWhite={white} />
         ]);
       case 'Deals':
@@ -113,7 +114,7 @@ class Header extends React.Component {
         right
         color="black"
         style={styles.search}
-        placeholder="Where do you want to go?"
+        placeholder={`${i18n.t('header.home.searchBar')}?`}
         placeholderTextColor={'#8898AA'}
         onFocus={() => navigation.navigate('SearchLocation')}
         iconContent={<Icon size={16} color={theme.COLORS.MUTED} name="search-zoom-in" family="ArgonExtra" />}

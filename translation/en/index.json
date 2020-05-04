@@ -1,0 +1,36 @@
+{
+    "header": {
+        "home": {
+            "searchBar": "Where do you want to go",
+            "title": "Home",
+            "category": {
+                "restaurant": "Restaurant"
+            }
+        },
+        "ratingForm": "Rate",
+        "Language": "Language",
+        "TripRoute": "Trip route"
+    },
+    "navigationBar": {
+        "Home": "Home",
+        "Language": "Language",
+        "TripRoute": "Trip route"
+    },
+    "SelectLanguage": {
+        "title": "Choose your language",
+        "button": "Save"
+    },
+    "PlaceDetail": {
+        "rateButton": "Rate",
+        "favoriteButton": "Favorite",
+        "spacePoint": "Space",
+        "locationPoint": "Location",
+        "qualityPoint": "Quality",
+        "servicePoint": "Service",
+        "pricePoint": "Price",
+        "commentsTitle": "Comments",
+        "picturesTitle": "Pictures",
+        "viewAllComments": "View all",
+        "viewLocationButton": "Map"
+    }
+}

@@ -28,7 +28,6 @@ class Home extends React.Component {
   getRecommenderPlaces() {
     const max = 10;
     const min = 7;
-    console.log('fetching')
     HttpUtil.getJsonAuthorization('/places/criterial-base/list', {
       spacePoint: Math.floor(Math.random()*(max-min+1)+min), 
       locationPoint: Math.floor(Math.random()*(max-min+1)+min),
@@ -67,12 +66,10 @@ class Home extends React.Component {
   
   renderRefreshIndicator() {
     const { isRefreshing } = this.state;
-    console.log(isRefreshing)
     return (<ActivityIndicator size="large" color="#0000ff" style={{marginTop: 50}} />    )
   }
 
   renderArticles = () => {
-    console.log(this.state.isRefreshing)
     const { navigation } = this.props;
     const { places, isRefreshing } = this.state;
     return (

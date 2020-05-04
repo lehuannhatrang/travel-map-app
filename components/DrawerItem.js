@@ -4,18 +4,19 @@ import { Block, Text, theme } from "galio-framework";
 
 import Icon from "./Icon";
 import argonTheme from "../constants/Theme";
+import i18n from "i18n-js";
 
 class DrawerItem extends React.Component {
   renderIcon = () => {
     const { title, focused } = this.props;
 
     switch (title) {
-      case "Home":
+      case i18n.t('navigationBar.Home'):
         return (
           <Icon
             name="shop"
             family="ArgonExtra"
-            size={10}
+            size={13}
             color={focused ? "white" : argonTheme.COLORS.PRIMARY}
           />
         );
@@ -24,7 +25,7 @@ class DrawerItem extends React.Component {
           <Icon
             name="map-big"
             family="ArgonExtra"
-            size={12}
+            size={13}
             color={focused ? "white" : argonTheme.COLORS.ERROR}
           />
         );
@@ -33,7 +34,7 @@ class DrawerItem extends React.Component {
           <Icon
             name="spaceship"
             family="ArgonExtra"
-            size={12}
+            size={13}
             color={focused ? "white" : argonTheme.COLORS.PRIMARY}
           />
         );
@@ -42,7 +43,7 @@ class DrawerItem extends React.Component {
           <Icon
             name="chart-pie-35"
             family="ArgonExtra"
-            size={12}
+            size={13}
             color={focused ? "white" : argonTheme.COLORS.WARNING}
           />
         );
@@ -51,7 +52,7 @@ class DrawerItem extends React.Component {
           <Icon
             name="calendar-date"
             family="ArgonExtra"
-            size={12}
+            size={13}
             color={focused ? "white" : argonTheme.COLORS.INFO}
           />
         );
@@ -59,6 +60,20 @@ class DrawerItem extends React.Component {
         return <Icon />;
       case "Log out":
         return <Icon />;
+      case i18n.t('navigationBar.Language'):
+        return <Icon 
+              name="language"
+              family="MaterialIcons"
+              size={13}
+              color={focused ? "white" : argonTheme.COLORS.INFO}
+              />;
+      case i18n.t('navigationBar.TripRoute'):
+        return <Icon 
+              name="map"
+              family="MaterialIcons"
+              size={13}
+              color={focused ? "white" : argonTheme.COLORS.INFO}
+              />;
       default:
         return null;
     }

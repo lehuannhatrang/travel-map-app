@@ -1,0 +1,36 @@
+{
+    "header": {
+        "home": {
+            "searchBar": "Bạn muốn đi đâu",
+            "title": "Trang chính",
+            "category": {
+                "restaurant": "Nhà hàng"
+            }
+        },
+        "ratingForm": "Đánh giá",
+        "Language": "Ngôn ngữ",
+        "TripRoute": "Lộ trình du lịch"
+    },
+    "navigationBar": {
+        "Home": "Trang chính",
+        "Language": "Ngôn ngữ",
+        "TripRoute": "Lộ trình"
+    },
+    "SelectLanguage": {
+        "title": "Chọn ngôn ngữ của bạn",
+        "button": "Lưu"
+    },
+    "PlaceDetail": {
+        "rateButton": "Đánh giá",
+        "favoriteButton": "Ưa thích",
+        "spacePoint": "Không gian",
+        "locationPoint": "Vị trí",
+        "qualityPoint": "Chất lượng",
+        "servicePoint": "Dịch vụ",
+        "pricePoint": "Giá cả",
+        "commentsTitle": "Đánh giá",
+        "picturesTitle": "Ảnh",
+        "viewAllComments": "Xem tất cả",
+        "viewLocationButton": "Bản đồ"
+    }
+}

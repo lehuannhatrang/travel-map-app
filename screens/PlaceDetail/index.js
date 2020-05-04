@@ -19,6 +19,10 @@ import { Images, argonTheme, articles } from "../../constants";
 import { HeaderHeight } from "../../constants/utils";
 import HttpUtil from "../../utils/Http.util";
 import Comment from "../../components/Comment";
+import RatingForm from "./ratingForm";
+import i18n from "i18n-js";
+import MapView from 'react-native-maps';
+import { Marker } from 'react-native-maps';
 
 const { width, height } = Dimensions.get("screen");
 const cardWidth = width - theme.SIZES.BASE * 2;
@@ -30,6 +34,7 @@ class PlaceDetail extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            openRatingForm: false,
             images : Images.Viewed.map(uri => ({
                 source: {
                     uri,
@@ -49,7 +54,7 @@ class PlaceDetail extends React.Component {
                         name: 'Lee Hun'
                     },
                     rating: [],
-                    comment: 'KTX nhu cac vay ak :))',
+                    comment: 'mon an ngon :))',
                     createdAt: '08/02/2020'
                 },
                 {   
@@ -59,7 +64,7 @@ class PlaceDetail extends React.Component {
                         name: 'Xi Xui Xeo'
                     },
                     rating: [],
-                    comment: 'Hiphop neva \ndie <3 HIHIHIHIHIIIHIksd lanska ndkandahsd khs k',
+                    comment: 'Co the se quay lai.',
                     createdAt: '23/06/2019'
                 }
             ]
@@ -73,7 +78,6 @@ class PlaceDetail extends React.Component {
         if(placeId) {
             HttpUtil.getJsonAuthorization('/places/detail', {id: placeId})
             .then(result => {
-                console.log(result.place)
                 this.setState({
                     placeDetail: result.place,
                     images: result.place.pictures.map(pictureUri => ({
@@ -104,9 +108,18 @@ class PlaceDetail extends React.Component {
         );
     }
 
+    handleViewOnMap() {
+        const { placeDetail } = this.state;
+        const { navigation } = this.props;
+        navigation.navigate('ViewOnMap', {
+            placeDetail
+        })
+    }
+
 
     render() {
-        const { showPicture, images, chosenPicture, comments, placeDetail } = this.state;
+        const { navigation } = this.props;
+        const { showPicture, images, chosenPicture, comments, placeDetail, openRatingForm } = this.state;
         if (!placeDetail) return <ActivityIndicator size="large" color="#0000ff" style={{marginTop: 100}} />
         return (
         <Block flex style={styles.profile}>
@@ -116,6 +129,11 @@ class PlaceDetail extends React.Component {
             onClose={() => this.setState({showPicture: false})}
             renderFooter={this.renderFooter}
             />
+            {/* <RatingForm 
+            open={openRatingForm}
+            onClose={() => this.setState({openRatingForm: false})} 
+            place={placeDetail}
+            /> */}
             <Block flex>
             <ImageBackground
                 source={{uri: placeDetail.mainImgUri}}
@@ -129,19 +147,27 @@ class PlaceDetail extends React.Component {
                 <Block flex style={styles.profileCard}>
                     <Block style={styles.titleInfo}>
                         <Block middle style={styles.nameInfo}>
-                            <Text bold size={28} color="#32325D" >
+                            <Text style={{textAlign:'center'}} bold size={28} color="#32325D" >
                             {placeDetail.name}
                             </Text>
-                            <Text size={16} color="#32325D" style={{ marginTop: 10 }}>
-                            {placeDetail.address}
+                            <Text size={16} color={theme.COLORS.MUTED} style={{ marginTop: 10, textAlign:'center' }}>
+                            {`${placeDetail.streetAddress},`}
+                            </Text>
+                            <Text size={16} color={theme.COLORS.MUTED} style={{ textAlign:'center' }}>
+                            {`${placeDetail.addressLocality}, ${placeDetail.addressRegion}`}
                             </Text>
                         </Block>
                         <Block middle row space="evenly" style={{ marginTop: 20, paddingBottom: 24 }} >
                             <Button small style={{ backgroundColor: argonTheme.COLORS.INFO }}>
-                                FAVORITE
+                                {i18n.t('PlaceDetail.favoriteButton')}
                             </Button>
-                            <Button small style={{ backgroundColor: argonTheme.COLORS.DEFAULT }}>
-                                RATE
+                            <Button small style={{ backgroundColor: argonTheme.COLORS.DEFAULT }} onPress={() => navigation.navigate('RatingForm', {
+                                place: placeDetail
+                            })}>
+                                {i18n.t('PlaceDetail.rateButton')}
+                            </Button>
+                            <Button small style={{ backgroundColor: argonTheme.COLORS.INFO }} onPress={() => this.handleViewOnMap()}>
+                                {i18n.t('PlaceDetail.viewLocationButton')}
                             </Button>
                         </Block>
                         <Block row space="between">
@@ -149,34 +175,34 @@ class PlaceDetail extends React.Component {
                                 <Text bold size={12} color="#525F7F" style={{ marginBottom: 4 }}>
                                     {placeDetail.spaceRating}
                                 </Text>
-                                <Text size={12}>Space</Text>
+                                <Text size={12}>{i18n.t('PlaceDetail.spacePoint')}</Text>
 
                             </Block>
                             <Block middle>
                                 <Text bold size={12} color="#525F7F" style={{ marginBottom: 4 }}>
                                     {placeDetail.locationRating}
                                 </Text>
-                                <Text size={12}>Location</Text>
+                                <Text size={12}>{i18n.t('PlaceDetail.locationPoint')}</Text>
                             </Block>
 
                             <Block middle>
                                 <Text bold size={12} color="#525F7F" style={{ marginBottom: 4 }}>
                                     {placeDetail.qualityRating}
                                 </Text>
-                                <Text size={12}>Quality</Text>
+                                <Text size={12}>{i18n.t('PlaceDetail.qualityPoint')}</Text>
                             </Block>
 
                             <Block middle>
                             <   Text bold size={12} color="#525F7F" style={{ marginBottom: 4 }}>   
                                     {placeDetail.serviceRating}
                                 </Text>
-                                <Text size={12}>Service</Text>
+                                <Text size={12}>{i18n.t('PlaceDetail.servicePoint')}</Text>
                             </Block>
                             <Block middle>
                                 <Text bold size={12} color="#525F7F" style={{ marginBottom: 4 }}>
                                     {placeDetail.priceRating}
                                 </Text>
-                                <Text size={12}>Price</Text>
+                                <Text size={12}>{i18n.t('PlaceDetail.pricePoint')}</Text>
                             </Block>
                         </Block>
                     </Block>
@@ -198,7 +224,7 @@ class PlaceDetail extends React.Component {
                         style={{ paddingVertical: 14, alignItems: "baseline" }}
                         >
                             <Text bold size={16} color="#525F7F">
-                            Comments
+                             {i18n.t('PlaceDetail.commentsTitle')}
                             </Text>
                         </Block>
                         {comments.map(comment => <Comment key={`cmt-${comment.id}`} comment={comment}/>)}
@@ -208,7 +234,7 @@ class PlaceDetail extends React.Component {
                             color="transparent"
                             textStyle={{ color: "#5E72E4", fontSize: 16}}
                             >
-                                View all
+                            {i18n.t('PlaceDetail.viewAllComments')}
                             </Button>
                         </Block>
                         <Block
@@ -216,11 +242,11 @@ class PlaceDetail extends React.Component {
                         style={{ paddingVertical: 14, alignItems: "baseline" }}
                         >
                             <Text bold size={16} color="#525F7F">
-                            Pictures
+                             {i18n.t('PlaceDetail.picturesTitle')}
                             </Text>
                         </Block>
                         <Block style={{ paddingBottom: -HeaderHeight * 2 }}>
-                            <Block row space="between" style={{ flexWrap: "wrap" }}>
+                            <Block row space="evenly" style={{ flexWrap: "wrap" }}>
                             {images.map((img, imgIndex) => (
                                 <TouchableOpacity key={`viewed-${imgIndex}`} onPress={()=> this.setState({showPicture: true, chosenPicture: img.source.uri})}>
                                 <Image

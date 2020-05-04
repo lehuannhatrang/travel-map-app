@@ -10,6 +10,7 @@ import Constants from 'expo-constants';
 import {AppContainer, AuthorizeContainer} from './navigation/Screens';
 import { Images, articles, argonTheme } from './constants';
 import { getDistance, getPreciseDistance } from 'geolib';
+import './i18n'
 
 // cache app images
 const assetImages = [

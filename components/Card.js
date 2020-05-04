@@ -1,7 +1,7 @@
 import React from 'react';
 import { withNavigation } from 'react-navigation';
 import PropTypes from 'prop-types';
-import { StyleSheet, Dimensions, Image, TouchableWithoutFeedback, View } from 'react-native';
+import { StyleSheet, Dimensions, Image, TouchableWithoutFeedback, View, AsyncStorage } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
 import * as Location from 'expo-location';
 import { getDistance, getPreciseDistance } from 'geolib';
@@ -15,26 +15,65 @@ class Card extends React.Component {
     super(props);
     this.state = {
       distance: '',
+      cannotFound: false,
     }
+
+    this.getDistance = this.getDistance.bind(this);
+  }
+
+  getDistance(item, currentLocation) {
+    const promise = new Promise((resolve, reject) => {
+        const distance = getPreciseDistance(
+          { latitude: currentLocation.coords.latitude, longitude: currentLocation.coords.longitude },
+          { latitude: item.latitude, longitude: item.longitude }
+        )
+        this.setState({distance})
+        resolve('done')
+    })
+    return promise;
   }
 
   componentDidMount() {
     const { item } = this.props;
     if(item && item.address) {
-        Location.getCurrentPositionAsync({})
-        .then(currentLocation => {
-            Location.geocodeAsync(item.address)
-            .then(placeLocation => {
-              if(!placeLocation[0]) console.log(item.address, placeLocation)
-              if(placeLocation.length > 0) {
-                const distance = getPreciseDistance(
-                  { latitude: currentLocation.coords.latitude, longitude: currentLocation.coords.longitude },
-                  { latitude: placeLocation[0].latitude, longitude: placeLocation[0].longitude }
-                )
-                this.setState({distance})
+        AsyncStorage.getItem('currentLocation')
+        .then(location => {
+            const currentLocation = JSON.parse(location)
+            // Location.geocodeAsync(item.address)
+            // .then(placeLocation => {
+            //   if(!placeLocation[0]) console.log(item.address, placeLocation)
+            //   if(placeLocation.length > 0) {
+            //     const distance = getPreciseDistance(
+            //       { latitude: currentLocation.coords.latitude, longitude: currentLocation.coords.longitude },
+            //       { latitude: placeLocation[0].latitude, longitude: placeLocation[0].longitude }
+            //     )
+            //     this.setState({distance})
+            //   }
+            // })
+
+            setTimeout(() => {
+              if(!this.state.distance && !this.state.cannotFound) {
+                this.getDistance(item, currentLocation)
+                .then(result => {})
+                .catch(err => {})
               }
-            })
+            }, 200)
+            // this.getDistance(item, currentLocation)
+            // .then(status => {})
+            // .catch(err => {
+            //   if(err === "E_RATE_EXCEEDED") {
+            //     setTimeout(() => {
+            //       this.getDistance(item, currentLocation)
+            //       .then(status => {})
+            //       .catch(err => {
+
+            //         console.log('den vl')
+            //       })
+            //     }, 200);
+            //   }
+            // })
         })
+        .catch(err => console.log(err))
     }
   }
 
