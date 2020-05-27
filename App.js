@@ -52,15 +52,16 @@ export default class App extends React.Component {
     if(!this.state.isAuthorized) {
       AsyncStorage.getItem('accessToken')
       .then(accessToken => {
-        // console.log(accessToken)
         if(!accessToken) return this.setState({isAuthorized: false});
         HttpUtils.getJsonAuthorization('/isLogin') 
         .then(response => {
-          // console.log(response)
+          console.log(response)
           if(response.isLogin) this.setState({isAuthorized: true})
           else AsyncStorage.getItem('accessToken')
         })
-        .catch(err => {console.log(err)})
+        .catch(err => {
+          console.log(err)
+        })
       })
       .catch(err => console.log('err:', err))
     }
@@ -68,16 +69,26 @@ export default class App extends React.Component {
       if(!this.state.isAuthorized) {
         AsyncStorage.getItem('accessToken')
         .then(accessToken => {
-          // console.log(accessToken)
-          if(!accessToken) return this.setState({isAuthorized: false});
+          if(!accessToken) {
+            return this.setState({isAuthorized: false})
+          };
+
           HttpUtils.getJsonAuthorization('/isLogin') 
           .then(response => {
             if(response.isLogin) this.setState({isAuthorized: true})
             else this.setState({isAuthorized: false})
           })
-          .catch(err => {})
+          .catch(err => {console.log(err)})
         })
         .catch(err => console.log('err:', err))
+      }
+      else {
+        AsyncStorage.getItem('accessToken')
+        .then(accessToken => {
+          if(!accessToken) {
+            return this.setState({isAuthorized: false})
+          };
+        })
       }
     }, 2000);
   }
@@ -94,7 +105,6 @@ export default class App extends React.Component {
   componentWillReceiveProps(nextProps) {
     AsyncStorage.getItem('accessToken')
     .then(accessToken => {
-      console.log(accessToken)
       if(!accessToken) return this.setState({isAuthorized: false});
 
       HttpUtils.getJsonAuthorization('/isLogin') 
@@ -109,7 +119,6 @@ export default class App extends React.Component {
   componentWillMount() {
     if (Platform.OS === 'android' && !Constants.isDevice) {
       const errorMessage = 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!'
-      console.log(errorMessage)
       this.setState({
         errorMessage
       });

@@ -14,7 +14,8 @@
     "navigationBar": {
         "Home": "Trang chính",
         "Language": "Ngôn ngữ",
-        "TripRoute": "Lộ trình"
+        "TripRoute": "Lộ trình",
+        "Logout": "Đăng xuất"
     },
     "SelectLanguage": {
         "title": "Chọn ngôn ngữ của bạn",
@@ -31,6 +32,8 @@
         "commentsTitle": "Đánh giá",
         "picturesTitle": "Ảnh",
         "viewAllComments": "Xem tất cả",
-        "viewLocationButton": "Bản đồ"
+        "viewLessComments": "Đóng",
+        "viewLocationButton": "Bản đồ",
+        "commentRating": "Đánh giá"
     }
 }

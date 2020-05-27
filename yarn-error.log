@@ -1,20 +1,20 @@
 Arguments: 
-  /home/lap11735/.nvm/versions/node/v13.0.1/bin/node /usr/share/yarn/bin/yarn.js add react-native-maps@~0.25.0
+  /home/lap11735/.nvm/versions/node/v12.0.0/bin/node /usr/share/yarn/bin/yarn.js add expo-image-picker@~7.0.0
 
 PATH: 
-  /home/lap11735/.nvm/versions/node/v13.0.1/bin:/home/lap11735/.rbenv/plugins/ruby-build/bin:/home/lap11735/.rbenv/shims:/home/lap11735/.rbenv/bin:/home/lap11735/.npm-global/bin:/home/lap11735/.local/share/umake/bin:/home/lap11735/bin:/home/lap11735/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/lap11735/Android/Sdk/emulator:/home/lap11735/Android/Sdk/tools:/home/lap11735/Android/Sdk/tools/bin:/home/lap11735/Android/Sdk/platform-tools:/home/lap11735/Android/Sdk/emulator:/home/lap11735/Android/Sdk/tools:/home/lap11735/Android/Sdk/tools/bin:/home/lap11735/Android/Sdk/platform-tools
+  /home/lap11735/.nvm/versions/node/v12.0.0/bin:/home/lap11735/.rbenv/plugins/ruby-build/bin:/home/lap11735/.rbenv/shims:/home/lap11735/.rbenv/bin:/home/lap11735/.npm-global/bin:/home/lap11735/.local/share/umake/bin:/home/lap11735/bin:/home/lap11735/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/lap11735/Android/Sdk/emulator:/home/lap11735/Android/Sdk/tools:/home/lap11735/Android/Sdk/tools/bin:/home/lap11735/Android/Sdk/platform-tools:/home/lap11735/Android/Sdk/emulator:/home/lap11735/Android/Sdk/tools:/home/lap11735/Android/Sdk/tools/bin:/home/lap11735/Android/Sdk/platform-tools
 
 Yarn version: 
   1.15.2
 
 Node version: 
-  13.0.1
+  12.0.0
 
 Platform: 
   linux x64
 
 Trace: 
-  Error: EACCES: permission denied, unlink '/home/lap11735/Huan/thesis/travel-map/travel-map-app/node_modules/geolib/CHANGELOG.md'
+  Error: EACCES: permission denied, unlink '/home/lap11735/Huan/thesis/travel-map/travel-map-app/node_modules/expo-localization/.eslintrc.js'
 
 npm manifest: 
   {
@@ -37,8 +37,10 @@ npm manifest:
       "expo": "^35.0.0",
       "expo-asset": "~7.0.0",
       "expo-font": "~7.0.0",
+      "expo-localization": "^8.1.0",
       "galio-framework": "^0.6.3",
       "geolib": "^3.2.1",
+      "i18n-js": "^3.5.1",
       "prop-types": "^15.7.2",
       "q": "^1.5.1",
       "react": "16.8.3",
@@ -47,6 +49,7 @@ npm manifest:
       "react-native-image-view": "^2.1.9",
       "react-native-image-viewer": "^0.0.3",
       "react-native-keyboard-aware-scroll-view": "^0.9.1",
+      "react-native-maps": "^0.27.1",
       "react-native-modal-dropdown": "^0.6.2",
       "react-native-slider": "^0.11.0",
       "react-navigation": "^3.11.0"
@@ -2086,6 +2089,13 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/expo-linear-gradient/-/expo-linear-gradient-7.0.1.tgz#86b8f22cb76fb1594cce6527c22e3182c7e98b6c"
     integrity sha512-YJsvA7nx8sMcV1+XhIsqT5+tyHhJi87AxgFW4fBlvUr9gAXhPMvUwkNMPPIkyOpKiEMPuQ7yWS29qwZdOHBGFQ==
   
+  expo-localization@^8.1.0:
+    version "8.1.0"
+    resolved "https://registry.yarnpkg.com/expo-localization/-/expo-localization-8.1.0.tgz#6003133e75849022918ae5638af6d553a04cde37"
+    integrity sha512-+wbsn9QLNG2GNOsbc+dfTQ39VEwrbn0TAungNqZ0UI9K2ZhrfQpAaAzAdN3TMOEhHluQKe0hiuULHpUgg8o7Kg==
+    dependencies:
+      rtl-detect "^1.0.2"
+  
   expo-location@~7.0.0:
     version "7.0.0"
     resolved "https://registry.yarnpkg.com/expo-location/-/expo-location-7.0.0.tgz#de5818f828354c681a173471e4dc25ec795a9b42"
@@ -2620,6 +2630,11 @@ Lockfile:
       setprototypeof "1.1.1"
       statuses ">= 1.5.0 < 2"
       toidentifier "1.0.0"
+  
+  i18n-js@^3.5.1:
+    version "3.5.1"
+    resolved "https://registry.yarnpkg.com/i18n-js/-/i18n-js-3.5.1.tgz#9787450894059bec1af791123231e59898eb97c1"
+    integrity sha512-nJgbE5Vj9qzOQfjdVd/uoMoO8ppVaB/3LB6KOmMfD8IQ1vNNh307iHyQLK8ZnLYWkAszfPvVpYmUt1Le/RuHMQ==
   
   iconv-lite@^0.4.17, iconv-lite@~0.4.13:
     version "0.4.24"
@@ -4232,6 +4247,11 @@ Lockfile:
       prop-types "^15.6.2"
       react-native-iphone-x-helper "^1.0.3"
   
+  react-native-maps@^0.27.1:
+    version "0.27.1"
+    resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-0.27.1.tgz#2f10cd417bb2fd938c9e015b1c9b6d9b1a44b97f"
+    integrity sha512-HygBkZBecTnIVRYrSiLRAvu4OmXOYso/A7c6Cy73HkOh9CgGV8Ap5eBea24tvmFGptjj5Hg8AJ94/YbmWK1Okw==
+  
   react-native-modal-dropdown@^0.6.2:
     version "0.6.2"
     resolved "https://registry.yarnpkg.com/react-native-modal-dropdown/-/react-native-modal-dropdown-0.6.2.tgz#da6027b3546d2031fbce46242bffc95561e13599"
@@ -4566,6 +4586,11 @@ Lockfile:
     version "3.6.2"
     resolved "https://registry.yarnpkg.com/rsvp/-/rsvp-3.6.2.tgz#2e96491599a96cde1b515d5674a8f7a91452926a"
     integrity sha512-OfWGQTb9vnwRjwtA2QwpG2ICclHC3pgXZO5xt8H2EfgDquO0qVdSb5T88L4qJVAEugbS56pAuV4XZM58UX8ulw==
+  
+  rtl-detect@^1.0.2:
+    version "1.0.2"
+    resolved "https://registry.yarnpkg.com/rtl-detect/-/rtl-detect-1.0.2.tgz#8eca316f5c6563d54df4e406171dd7819adda67f"
+    integrity sha512-5X1422hvphzg2a/bo4tIDbjFjbJUOaPZwqE6dnyyxqwFqfR+tBcvfqapJr0o0VygATVCGKiODEewhZtKF+90AA==
   
   run-async@^2.2.0:
     version "2.3.0"

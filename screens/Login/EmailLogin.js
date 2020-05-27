@@ -6,6 +6,7 @@ import {
   StatusBar,
   KeyboardAvoidingView,
   ScrollView,
+  ActivityIndicator,
   AsyncStorage
 } from "react-native";
 import { Block, Checkbox, Text, theme } from "galio-framework";
@@ -22,7 +23,8 @@ class LoginWithEmail extends React.Component {
         this.state = {
             email: '',
             password: '',
-            loginErrorMessage: ''
+            loginErrorMessage: '',
+            loading: false,
         }
     }
 
@@ -36,18 +38,27 @@ class LoginWithEmail extends React.Component {
             this.setState({loginErrorMessage: 'Missing password'})
         }
         else {
+            this.setState({loading: true})
             const body = {
                 username: email,
                 password
             }
             HttpUtil.postJson('/auth/login', body)
             .then(result => {
+                console.log('ok', result)
                 console.log('Login successfull')
-                AsyncStorage.setItem('accessToken', result.token);
+                AsyncStorage.setItem('accessToken', result.token)
+                .then(result => {
+                    // this.setState({loading: false})
+                })
                 // navigation.navigate("Home");
             })
             .catch(error => {
-                this.setState({loginErrorMessage: 'Failed to login'})
+                console.log('thot', error)
+                this.setState({
+                    loginErrorMessage: 'Failed to login',
+                    loading: false
+                })
             })
         }
     }
@@ -116,20 +127,12 @@ class LoginWithEmail extends React.Component {
                                     </Text>
                                 </Block>
                             </Block>
-                            <Block row width={width * 0.75} style={styles.rememberMeButton}>
-                                <Checkbox
-                                checkboxStyle={{
-                                    borderWidth: 3
-                                }}
-                                color={argonTheme.COLORS.PRIMARY}
-                                label="Remember me"
-                                />
-                            </Block>
                             <Block middle>
-                                <Button color="primary" style={styles.createButton} onPress={() => this.handleSubmitLogin()}>
-                                <Text bold size={14} color={argonTheme.COLORS.WHITE}>
-                                    LOGIN
-                                </Text>
+                                <Button disabled={this.state.loading} color="primary" style={styles.createButton} onPress={() => this.handleSubmitLogin()}>
+                                    {!this.state.loading && <Text bold size={14} color={argonTheme.COLORS.WHITE}>
+                                        LOGIN
+                                    </Text>}
+                                    {!!this.state.loading && <ActivityIndicator size="small" color="#0000ff" />}
                                 </Button>
                             </Block>
                             </KeyboardAvoidingView>
@@ -147,7 +150,7 @@ class LoginWithEmail extends React.Component {
 const styles = StyleSheet.create({
   registerContainer: {
     width: width * 0.9,
-    height: height * 0.5,
+    height: height * 0.45,
     backgroundColor: "#F4F5F7",
     borderRadius: 4,
     shadowColor: argonTheme.COLORS.BLACK,
@@ -189,7 +192,7 @@ const styles = StyleSheet.create({
   passwordCheck: {
     paddingLeft: 15,
     paddingTop: 13,
-    paddingBottom: 20
+    paddingBottom: 10
   },
   createButton: {
     width: width * 0.5,

@@ -58,8 +58,13 @@ class DrawerItem extends React.Component {
         );
       case "Getting Started":
         return <Icon />;
-      case "Log out":
-        return <Icon />;
+      case i18n.t('navigationBar.Logout'):
+        return <Icon
+                name="logout"
+                family="AntDesign"
+                size={13}
+                color={focused ? "white" : argonTheme.COLORS.ERROR}
+              />;
       case i18n.t('navigationBar.Language'):
         return <Icon 
               name="language"

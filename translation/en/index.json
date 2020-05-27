@@ -14,7 +14,8 @@
     "navigationBar": {
         "Home": "Home",
         "Language": "Language",
-        "TripRoute": "Trip route"
+        "TripRoute": "Trip route",
+        "Logout": "Log out"
     },
     "SelectLanguage": {
         "title": "Choose your language",
@@ -31,6 +32,8 @@
         "commentsTitle": "Comments",
         "picturesTitle": "Pictures",
         "viewAllComments": "View all",
-        "viewLocationButton": "Map"
+        "viewLessComments": "Close",
+        "viewLocationButton": "Map",
+        "commentRating": "Rating"
     }
 }

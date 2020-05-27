@@ -253,14 +253,6 @@ const AppStack = createDrawerNavigator(
         )
       })
     },  
-    // TripRoute: {
-    //   screen: TripRouteStack,
-    //   navigationOptions: navOpt => ({
-    //     drawerLabel: ({ focused }) => (
-    //       <DrawerItem focused={focused} screen="TripRoute" title={i18n.t('navigationBar.TripRoute')} />
-    //     )
-    //   })
-    // },
     Profile: {
       screen: ProfileStack,
       navigationOptions: navOpt => ({
@@ -269,22 +261,22 @@ const AppStack = createDrawerNavigator(
         )
       })
     },
-    Elements: {
-      screen: ElementsStack,
-      navigationOptions: navOpt => ({
-        drawerLabel: ({ focused }) => (
-          <DrawerItem focused={focused} screen="Elements" title="Elements" />
-        )
-      })
-    },
-    Articles: {
-      screen: ArticlesStack,
-      navigationOptions: navOpt => ({
-        drawerLabel: ({ focused }) => (
-          <DrawerItem focused={focused} screen="Articles" title="Articles" />
-        )
-      })
-    },
+    // Elements: {
+    //   screen: ElementsStack,
+    //   navigationOptions: navOpt => ({
+    //     drawerLabel: ({ focused }) => (
+    //       <DrawerItem focused={focused} screen="Elements" title="Elements" />
+    //     )
+    //   })
+    // },
+    // Articles: {
+    //   screen: ArticlesStack,
+    //   navigationOptions: navOpt => ({
+    //     drawerLabel: ({ focused }) => (
+    //       <DrawerItem focused={focused} screen="Articles" title="Articles" />
+    //     )
+    //   })
+    // },
     Language: {
       screen: SelectLanguageStack,
       navigationOptions: navOpt => ({

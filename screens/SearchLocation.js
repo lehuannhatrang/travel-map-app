@@ -4,7 +4,7 @@ import { Block, theme,  } from 'galio-framework';
 import Icon from '../components/Icon';
 import Input from '../components/Input';
 import argonTheme from '../constants/Theme';
-import { Select, Card } from '../components';
+import { Select, DefaultCard } from '../components';
 import articles from '../constants/articles';
 const { width } = Dimensions.get('screen');
 
@@ -91,8 +91,9 @@ class SearchLocation extends React.Component {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.findingResults}>
           <Block flex>
-            {this.state.sugestionPlaces.map(place => 
-              <Card 
+            {this.state.sugestionPlaces.map((place, index) => 
+              <DefaultCard 
+              key={`option-${index}`}
               item={{
                 title: `${place.region}, ${place.country}`,
               }} 

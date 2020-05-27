@@ -93,7 +93,6 @@ class HttpUtil {
     static getJsonAuthorization(path, data, headers) {
         return AsyncStorage.getItem('accessToken')
         .then(accessToken => {
-            console.log(accessToken)
             headers = {...headers, Authorization: accessToken}
             return HttpUtil.makeJsonRequest('GET', path, data, headers);
         })

@@ -10,9 +10,10 @@ const iOSLogo = require("../assets/imgs/ios.png");
 const androidLogo = require("../assets/imgs/android.png");
 const FoodyLogo = require("../assets/imgs/foody_logo.png")
 const VietNamFlag = require("../assets/imgs/VietNamFlag.png")
+const defaultProfilePicture = require("../assets/imgs/defaultProfile.jpg")
 // internet imgs
 
-const ProfilePicture = 'https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?fit=crop&w=1650&q=80';
+const ProfilePicture = defaultProfilePicture;
 
 const Viewed = [
   'https://images.unsplash.com/photo-1501601983405-7c7cabaa1581?fit=crop&w=240&q=80',

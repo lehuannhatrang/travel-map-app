@@ -5,20 +5,82 @@ import {
   ScrollView,
   Image,
   ImageBackground,
-  Platform
+  Platform,
+  TouchableOpacity,
+  ActivityIndicator,
+  AsyncStorage
 } from "react-native";
 import { Block, Text, theme } from "galio-framework";
 
 import { Button } from "../components";
 import { Images, argonTheme } from "../constants";
 import { HeaderHeight } from "../constants/utils";
+import HttpUtil from "../utils/Http.util";
+import * as ImagePicker from 'expo-image-picker';
+import Constants from 'expo-constants';
+import * as Permissions from 'expo-permissions';
 
 const { width, height } = Dimensions.get("screen");
 
 const thumbMeasure = (width - 48 - 32) / 3;
 
 class Profile extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentUser: '',
+    }
+    this.getPermissionAsync = this.getPermissionAsync.bind(this);
+    this.handlePickImage = this.handlePickImage.bind(this);
+  }
+
+  componentDidMount() {
+    HttpUtil.getJsonAuthorization('/user')
+    .then(currentUser => {
+      this.setState({currentUser})
+    })
+  }
+
+  async getPermissionAsync() {
+    if (Constants.platform.ios) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== 'granted') {
+        alert('Sorry, we need camera roll permissions to make this work!');
+      }
+    }
+  };
+
+  async handlePickImage() {
+    try {
+      await this.getPermissionAsync()
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.3,
+        base64: true,
+      });
+      if (!result.cancelled) {
+        currentUser = await HttpUtil.postJsonAuthorization('/user/avatar', {img: result.base64})
+        this.setState({ currentUser });
+      }
+
+    } catch (E) {
+      console.log(E);
+    }
+  }
+
+  handleLogout() {
+    const { navigation } = this.props;
+    HttpUtil.getJson('/auth/logout')
+    .then(response => {
+      AsyncStorage.removeItem('accessToken')
+    })
+  }
+
   render() {
+    const { currentUser } = this.state;
+    if (!currentUser) return <ActivityIndicator size="large" color="#0000ff" style={{marginTop: 100}} />
     return (
       <Block flex style={styles.profile}>
         <Block flex>
@@ -33,10 +95,13 @@ class Profile extends React.Component {
             >
               <Block flex style={styles.profileCard}>
                 <Block middle style={styles.avatarContainer}>
-                  <Image
-                    source={{ uri: Images.ProfilePicture }}
-                    style={styles.avatar}
-                  />
+                  <TouchableOpacity onPress={() => this.handlePickImage()}>
+                    <Image
+                      source={currentUser.avatar ? {uri: `data:image/gif;base64,${currentUser.avatar}`} : Images.ProfilePicture}
+                      style={styles.avatar}
+                    />
+                  </TouchableOpacity>
+
                 </Block>
                 <Block style={styles.info}>
                   <Block
@@ -49,13 +114,14 @@ class Profile extends React.Component {
                       small
                       style={{ backgroundColor: argonTheme.COLORS.INFO }}
                     >
-                      CONNECT
+                      Edit
                     </Button>
                     <Button
                       small
-                      style={{ backgroundColor: argonTheme.COLORS.DEFAULT }}
+                      style={{ backgroundColor: argonTheme.COLORS.ERROR }}
+                      onPress={() => this.handleLogout()}
                     >
-                      MESSAGE
+                      LOG OUT
                     </Button>
                   </Block>
                   <Block row space="between">
@@ -97,10 +163,10 @@ class Profile extends React.Component {
                 <Block flex>
                   <Block middle style={styles.nameInfo}>
                     <Text bold size={28} color="#32325D">
-                      Jessica Jones, 27
+                      {currentUser.displayName}
                     </Text>
                     <Text size={16} color="#32325D" style={{ marginTop: 10 }}>
-                      San Francisco, USA
+                      {currentUser.email}
                     </Text>
                   </Block>
                   <Block middle style={{ marginTop: 30, marginBottom: 16 }}>
@@ -294,7 +360,7 @@ const styles = StyleSheet.create({
     width: width,
     height: height,
     padding: 0,
-    zIndex: 1
+    zIndex: 1,
   },
   profileBackground: {
     width: width,

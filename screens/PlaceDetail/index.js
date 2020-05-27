@@ -29,6 +29,8 @@ const cardWidth = width - theme.SIZES.BASE * 2;
 
 const thumbMeasure = (width - 48 - 32) / 3;
 
+const MAXIMUM_COMMENT_SHOWING = 2
+
 
 class PlaceDetail extends React.Component {
     constructor(props) {
@@ -46,28 +48,8 @@ class PlaceDetail extends React.Component {
             showPicture: false,
             chosenPicture: '',
             placeDetail: '',
-            comments: [
-                {
-                    id: 1,
-                    author: {
-                        avatar: 'https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?fit=crop&w=1650&q=80',
-                        name: 'Lee Hun'
-                    },
-                    rating: [],
-                    comment: 'mon an ngon :))',
-                    createdAt: '08/02/2020'
-                },
-                {   
-                    id: 2,
-                    author: {
-                        avatar: 'https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?fit=crop&w=1650&q=80',
-                        name: 'Xi Xui Xeo'
-                    },
-                    rating: [],
-                    comment: 'Co the se quay lai.',
-                    createdAt: '23/06/2019'
-                }
-            ]
+            comments: [],
+            showAllComment: false,
         }
         this.renderFooter = this.renderFooter.bind(this);
     }
@@ -75,25 +57,39 @@ class PlaceDetail extends React.Component {
     componentDidMount() {
         const { navigation } = this.props;
         const placeId = this.props.navigation.state.params ? this.props.navigation.state.params.placeId : null;
-        if(placeId) {
-            HttpUtil.getJsonAuthorization('/places/detail', {id: placeId})
-            .then(result => {
-                this.setState({
-                    placeDetail: result.place,
-                    images: result.place.pictures.map(pictureUri => ({
-                        source: {
-                            uri: pictureUri,
-                        },
-                        title: result.place.name,
-                        width: 806,
-                        height: 720,
-                    }))
+
+        this.focusListener = navigation.addListener('didFocus', () => {
+            if(placeId) {
+                HttpUtil.getJsonAuthorization('/places/detail', {id: placeId})
+                .then(result => {
+                    this.setState({
+                        placeDetail: result.place,
+                        images: result.place.pictures.map(pictureUri => ({
+                            source: {
+                                uri: pictureUri,
+                            },
+                            title: result.place.name,
+                            width: 806,
+                            height: 720,
+                        }))
+                    })
                 })
-            })
-            .catch(err => {
-                navigation.navigate('Home', {})
-            })
-        }
+                .catch(err => {
+                    navigation.navigate('Home', {})
+                })
+                HttpUtil.getJsonAuthorization('/places/rating', {placeId})
+                .then(data => {
+                    this.setState({
+                        comments: data.userRatings.sort(function(x, y){
+                            const timeX = new Date(x.TimeStamp)
+                            const timeY = new Date(y.TimeStamp)
+                            return timeY.getTime() - timeX.getTime();
+                        })
+                    })
+                })
+            }
+        });
+
     }
 
     renderFooter({title}) {
@@ -115,6 +111,11 @@ class PlaceDetail extends React.Component {
             placeDetail
         })
     }
+
+    // componentWillUnmount() {
+    //     // Remove the event listener before removing the screen from the stack
+    //     this.focusListener.remove();
+    // }
 
 
     render() {
@@ -227,14 +228,20 @@ class PlaceDetail extends React.Component {
                              {i18n.t('PlaceDetail.commentsTitle')}
                             </Text>
                         </Block>
-                        {comments.map(comment => <Comment key={`cmt-${comment.id}`} comment={comment}/>)}
+
+                        {!this.state.showAllComment && comments.slice(0, MAXIMUM_COMMENT_SHOWING).map(comment => <Comment showAll={false} key={`cmt-${comment.id}`} comment={comment}/>)}
+                        
+                        {!!this.state.showAllComment && comments.map(comment => <Comment showAll={true} key={`cmt-${comment.id}`} comment={comment}/>)}
+
                         <Block row>
                             <Button
                             small
                             color="transparent"
                             textStyle={{ color: "#5E72E4", fontSize: 16}}
+                            onPress={() => this.setState({showAllComment: !this.state.showAllComment})}
                             >
-                            {i18n.t('PlaceDetail.viewAllComments')}
+                            {this.state.showAllComment ? i18n.t('PlaceDetail.viewLessComments') : i18n.t('PlaceDetail.viewAllComments')}
+                            {/* {!!this.state.showAllComment && i18n.t('PlaceDetail.viewLessComments')} */}
                             </Button>
                         </Block>
                         <Block
