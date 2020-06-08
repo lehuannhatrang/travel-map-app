@@ -5,6 +5,8 @@ import {
   View,
   TouchableOpacity,
   AsyncStorage,
+  ImageBackground,
+  DatePickerIOS,
   ActivityIndicator
 } from "react-native";
 import MapView from 'react-native-maps';
@@ -14,6 +16,7 @@ import { Block, Checkbox, Text, theme, Card } from "galio-framework";
 
 import { Button, Icon, Input } from "../../components";
 import { Images, argonTheme } from "../../constants";
+import RNDateTimePicker from '@react-native-community/datetimepicker';
 import i18n from 'i18n-js';
 
 const { width, height } = Dimensions.get("screen");
@@ -25,12 +28,14 @@ const defaultInitalRegion = {
     longitudeDelta: 0.2,
 }
 
-class TripRoute extends React.Component {
+class PickDate extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             initialRegion: '',
-            mapType: 'standard'
+            mapType: 'standard',
+            chosenDate: new Date(),
+            mode: 'date',
         }
     }
 
@@ -57,24 +62,37 @@ class TripRoute extends React.Component {
     }
 
     render() {
-        const { initialRegion, mapType } = this.state;
+        const { initialRegion, mapType, mode, date } = this.state;
         const { places } = this.props;
         return (
             <View style={styles.container}>
-                {!!initialRegion && 
-                    <MapView style={styles.mapStyle} initialRegion={initialRegion} 
-                    showsUserLocation={true} followUserLocation={true} mapType={mapType}
-                    >
-                        {/* <Marker coordinate={initialRegion} title={'Leehun'} description={'ok'} draggable/> */}
-                    </MapView>
-                }
-                {!initialRegion && <ActivityIndicator size="large" color="#0000ff" style={{marginTop: 100}} />}
+                <ImageBackground
+                source={Images.travelBgBot}
+                style={styles.background}
+                >
+                    <Block center style={{marginTop: 10, flex: 1}}>
+                        <Text size={28} color="#1285cb">Pick a date</Text>
+                    </Block>
+                    <Block center style={{flex: 1}}>
+                        <Text size={18} muted>to travel with us</Text>
+                    </Block>
+                    <Block style={{flex: 10}}>
+                        <DatePickerIOS style={styles.datePicker} date={this.state.chosenDate} mode="date" onDateChange={newDate => {}} />
+                    </Block>
+                    <Block row>
+                        <Button style={{width: "100%"}}>
+                            <Text size={20} color="white">
+                                Let's go
+                            </Text>
+                        </Button>
+                    </Block>
+                </ImageBackground>
             </View>
         );
     }
 }
 
-TripRoute.defaultProps = {
+PickDate.defaultProps = {
     places: []
 }
 
@@ -85,10 +103,20 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
     },
+    background: {
+      width: "100%",
+      height: "auto",
+      flex: 1
+    },
     mapStyle: {
       width: Dimensions.get('window').width,
       height: Dimensions.get('window').height,
     },
+    datePicker: {
+        width: "100%",
+        color: "white",
+        backgroundColor: "rgba(255, 255, 255, 0.4)"
+    }
 });
 
-export default TripRoute;
+export default PickDate;

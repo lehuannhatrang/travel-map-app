@@ -9,7 +9,8 @@
         },
         "ratingForm": "Rate",
         "Language": "Language",
-        "TripRoute": "Trip route"
+        "TripRoute": "Trip route",
+        "PlanningTrip": "Suggestion trip"
     },
     "navigationBar": {
         "Home": "Home",

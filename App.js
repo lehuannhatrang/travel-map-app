@@ -12,6 +12,8 @@ import { Images, articles, argonTheme } from './constants';
 import { getDistance, getPreciseDistance } from 'geolib';
 import './i18n'
 
+console.disableYellowBox = true;
+
 // cache app images
 const assetImages = [
   Images.Onboarding,
@@ -55,7 +57,6 @@ export default class App extends React.Component {
         if(!accessToken) return this.setState({isAuthorized: false});
         HttpUtils.getJsonAuthorization('/isLogin') 
         .then(response => {
-          console.log(response)
           if(response.isLogin) this.setState({isAuthorized: true})
           else AsyncStorage.getItem('accessToken')
         })

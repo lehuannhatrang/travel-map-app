@@ -192,7 +192,7 @@ class Header extends React.Component {
           left={
             <Icon 
               name={back ? 'nav-left' : "menu-8"} family="ArgonExtra" 
-              size={14} onPress={this.handleLeftPress} 
+              size={back ? 30 : 14} onPress={this.handleLeftPress} 
               color={iconColor || argonTheme.COLORS.ICON}/>
           }
           leftStyle={{ paddingVertical: 12, flex: 0.2 }}

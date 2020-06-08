@@ -11,6 +11,9 @@ const androidLogo = require("../assets/imgs/android.png");
 const FoodyLogo = require("../assets/imgs/foody_logo.png")
 const VietNamFlag = require("../assets/imgs/VietNamFlag.png")
 const defaultProfilePicture = require("../assets/imgs/defaultProfile.jpg")
+const bgPink = require("../assets/imgs/background_pink.png")
+const travelBg = require("../assets/imgs/travel_bg.png")
+const travelBgBot = require("../assets/imgs/travel_bg_bottom.png")
 // internet imgs
 
 const ProfilePicture = defaultProfilePicture;
@@ -43,5 +46,8 @@ export default {
   iOSLogo,
   androidLogo,
   FoodyLogo,
-  VietNamFlag
+  VietNamFlag,
+  bgPink,
+  travelBg,
+  travelBgBot
 };

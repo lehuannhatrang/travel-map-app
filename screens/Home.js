@@ -28,7 +28,7 @@ class Home extends React.Component {
   getRecommenderPlaces() {
     const max = 10;
     const min = 7;
-    HttpUtil.getJsonAuthorization('/places/criterial-base/list', {
+    HttpUtil.getJsonAuthorization('/places/recommender-places', {
       spacePoint: Math.floor(Math.random()*(max-min+1)+min), 
       locationPoint: Math.floor(Math.random()*(max-min+1)+min),
       qualityPoint: Math.floor(Math.random()*(max-min+1)+min), 

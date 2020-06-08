@@ -9,7 +9,8 @@
         },
         "ratingForm": "Đánh giá",
         "Language": "Ngôn ngữ",
-        "TripRoute": "Lộ trình du lịch"
+        "TripRoute": "Lộ trình du lịch",
+        "PlanningTrip": "Lịch trình gợi ý"
     },
     "navigationBar": {
         "Home": "Trang chính",

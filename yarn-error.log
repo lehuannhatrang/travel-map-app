@@ -1,5 +1,5 @@
 Arguments: 
-  /home/lap11735/.nvm/versions/node/v12.0.0/bin/node /usr/share/yarn/bin/yarn.js add expo-image-picker@~7.0.0
+  /home/lap11735/.nvm/versions/node/v12.0.0/bin/node /usr/share/yarn/bin/yarn.js add @react-native-community/datetimepicker
 
 PATH: 
   /home/lap11735/.nvm/versions/node/v12.0.0/bin:/home/lap11735/.rbenv/plugins/ruby-build/bin:/home/lap11735/.rbenv/shims:/home/lap11735/.rbenv/bin:/home/lap11735/.npm-global/bin:/home/lap11735/.local/share/umake/bin:/home/lap11735/bin:/home/lap11735/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/lap11735/Android/Sdk/emulator:/home/lap11735/Android/Sdk/tools:/home/lap11735/Android/Sdk/tools/bin:/home/lap11735/Android/Sdk/platform-tools:/home/lap11735/Android/Sdk/emulator:/home/lap11735/Android/Sdk/tools:/home/lap11735/Android/Sdk/tools/bin:/home/lap11735/Android/Sdk/platform-tools
@@ -14,7 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  Error: EACCES: permission denied, unlink '/home/lap11735/Huan/thesis/travel-map/travel-map-app/node_modules/expo-localization/.eslintrc.js'
+  Error: EACCES: permission denied, unlink '/home/lap11735/Huan/thesis/travel-map/travel-map-app/node_modules/expo-image-picker/node_modules/expo-permissions/.eslintrc.js'
 
 npm manifest: 
   {
@@ -33,10 +33,12 @@ npm manifest:
       "url": "git+https://github.com/creativetimofficial/argon-react-native.git"
     },
     "dependencies": {
+      "@react-native-community/datetimepicker": "^2.4.0",
       "axios": "^0.19.2",
       "expo": "^35.0.0",
       "expo-asset": "~7.0.0",
       "expo-font": "~7.0.0",
+      "expo-image-picker": "^8.1.0",
       "expo-localization": "^8.1.0",
       "galio-framework": "^0.6.3",
       "geolib": "^3.2.1",
@@ -1024,6 +1026,13 @@ Lockfile:
       ws "^1.1.0"
       xcode "^2.0.0"
       xmldoc "^0.4.0"
+  
+  "@react-native-community/datetimepicker@^2.4.0":
+    version "2.4.0"
+    resolved "https://registry.yarnpkg.com/@react-native-community/datetimepicker/-/datetimepicker-2.4.0.tgz#6b3cf050f507f9b70d31d5a572e1153bb5bd50c9"
+    integrity sha512-ZXPwNAQt4T66PTL20l2nSEbtsn6vtsvFqdYWBfx8aaNKBoCPDygR6SsYzWcIoexKH5wmX0zctSzIsryl+Gtngg==
+    dependencies:
+      invariant "^2.2.4"
   
   "@react-navigation/core@~3.5.1":
     version "3.5.1"
@@ -2079,6 +2088,13 @@ Lockfile:
     dependencies:
       fontfaceobserver "^2.1.0"
   
+  expo-image-picker@^8.1.0:
+    version "8.1.0"
+    resolved "https://registry.yarnpkg.com/expo-image-picker/-/expo-image-picker-8.1.0.tgz#014e4f4aaef4c1daf56d13de27a41ef78660aa15"
+    integrity sha512-UMHiDGiflg47A/nfnmJ1gYdB/sEoxB4STVGgMeLNYpUkVR59kUWqsGTyVEtSywNCLPuXPZVB9NaRUd81Rbs7lA==
+    dependencies:
+      expo-permissions "~8.1.0"
+  
   expo-keep-awake@~7.0.0:
     version "7.0.0"
     resolved "https://registry.yarnpkg.com/expo-keep-awake/-/expo-keep-awake-7.0.0.tgz#131f56bc1ed8dd66e64a159afd7eaef26939d929"
@@ -2107,6 +2123,11 @@ Lockfile:
     version "7.0.0"
     resolved "https://registry.yarnpkg.com/expo-permissions/-/expo-permissions-7.0.0.tgz#f4135c3cf8e49c673a9a714459a1eb2b40fe2092"
     integrity sha512-C+qyVz+pdZO4YpVR2HSC3gsBZg0Qb8brCFgzmDmWcAtgrOiHClaLPdhI2XtQuGh8ubXcKPUGZp++UCEGiG0Jxg==
+  
+  expo-permissions@~8.1.0:
+    version "8.1.0"
+    resolved "https://registry.yarnpkg.com/expo-permissions/-/expo-permissions-8.1.0.tgz#a7f2ee91ba76ce3a467e7b10adaa9ca5201b226f"
+    integrity sha512-QBHD+1J9+sGFnhoEGzMRchPweeEE0OJ9ehG/0l1BMRBA7qsLS9vRC1FTJ55NwjI0Kr4RTha9r6ZX1kZHT09f/w==
   
   expo-sqlite@~7.0.0:
     version "7.0.0"

@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   AsyncStorage,
+  Platform,
   Image,
   ActivityIndicator
 } from "react-native";
@@ -16,6 +17,9 @@ import { Block, Checkbox, Text, theme, Card } from "galio-framework";
 import { Button, Icon, Input } from "../../components";
 import { argonTheme } from "../../constants";
 import i18n from 'i18n-js';
+import Header from "../../components/Header";
+
+import { HeaderHeight } from "../../constants/utils";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -33,7 +37,7 @@ class ViewOnMap extends React.Component {
             initialRegion: '',
             mapType: 'standard',
             placeDetail: '',
-            placeCoords: ''
+            placeCoords: '',
         }
     }
 
@@ -62,30 +66,26 @@ class ViewOnMap extends React.Component {
     }
     
     movingCurrentLocation() {
-        console.log('ok')
         AsyncStorage.getItem('currentLocation')
         .then(location => {
             if(!!location) {
                 const currentLocation = JSON.parse(location)
-                console.log(currentLocation)
                 const newInitRegion = {
                     latitude: currentLocation.coords.latitude,
                     longitude: currentLocation.coords.longitude,
-                    latitudeDelta: 0.05,
-                    longitudeDelta: 0.05,
+                    latitudeDelta: 0.01,
+                    longitudeDelta: 0.01,
                 }
-                this.setState({
-                    initialRegion: newInitRegion,
-                })
+                this.mapView.animateToRegion(newInitRegion);
             }
         })
         .catch(err => {
-            
         })
     }
 
     render() {
-        const { initialRegion, mapType, placeDetail, placeCoords } = this.state;
+        const { navigation } = this.props;
+        const { initialRegion, mapType, placeDetail, placeCoords, animateToRegion } = this.state;
         if(!initialRegion) return (
             <View style={styles.container}>
                 <ActivityIndicator size="large" color="#0000ff" style={{marginTop: 100}} />
@@ -93,7 +93,10 @@ class ViewOnMap extends React.Component {
         )
         else return (
             <View style={styles.container}>
-                <MapView style={styles.mapStyle} initialRegion={initialRegion} 
+                {/* <Header title="View on map" navigation={navigation} /> */}
+                <MapView 
+                ref = {(ref)=> this.mapView=ref}
+                style={styles.mapStyle} initialRegion={initialRegion} 
                 showsUserLocation={true} followUserLocation={true} mapType={mapType}
                 >
                     <Marker coordinate={placeCoords} isPreselected={true} 
@@ -111,14 +114,17 @@ class ViewOnMap extends React.Component {
 }
 
 ViewOnMap.defaultProps = {
+
 }
 
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fff',
+    //   backgroundColor: '#fff',
       alignItems: 'center',
       justifyContent: 'center',
+    //   marginTop: Platform.OS === "android" ? -HeaderHeight : 0,
+      // marginBottom: -HeaderHeight * 2,
     },
     mapStyle: {
       width: Dimensions.get('window').width,

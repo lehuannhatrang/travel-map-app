@@ -19,14 +19,15 @@ import Articles from "../screens/Articles";
 import SearchLocation from "../screens/SearchLocation";
 import LoginWithEmail from "../screens/Login/EmailLogin";
 import PlaceDetail from "../screens/PlaceDetail";
-// drawer
-import Menu from "./Menu";
-import DrawerItem from "../components/DrawerItem";
-import Categories from "../constants/categories";
 import RatingForm from "../screens/PlaceDetail/ratingForm";
 import SelectLanguage from "../screens/SelectLanguage";
 import TripRoute from "../screens/TripRoute";
 import ViewOnMap from "../screens/PlaceDetail/viewOnMap";
+import PlanningTrip from "../screens/TripRoute/PlanningTrip";
+// drawer
+import Menu from "./Menu";
+import DrawerItem from "../components/DrawerItem";
+import Categories from "../constants/categories";
 import i18n from "i18n-js";
 // header for screens
 import Header from "../components/Header";
@@ -132,10 +133,13 @@ const HomeStack = createStackNavigator(
     },
     ViewOnMap: {
       screen: ViewOnMap,
-      navigationOptions: ({ navigation }) => ({
-        header: null
-        // headerTransparent: true
-      })
+      navigationOptions: ({ navigation }) => {console.log(navigation);return{
+        drawerLabel: ({ focused }) => (
+          <DrawerItem focused={focused} screen="Map" title={i18n.t('header.ratingForm')} />
+        ),
+        header: <Header back title={navigation.state.params.placeDetail.name} navigation={navigation} />,
+        headerTransparent: true
+      }},
     },
     RatingForm: {
       screen: RatingForm,
@@ -146,6 +150,12 @@ const HomeStack = createStackNavigator(
         header: <Header options title={i18n.t('header.ratingForm')} navigation={navigation} />
       })
     },
+    SearchLocation: {
+      screen: SearchLocation,
+      navigationOptions: ({ navigation }) => ({
+        header: null,
+      }),
+    },
     Pro: {
       screen: Pro,
       navigationOptions: ({ navigation }) => ({
@@ -155,12 +165,6 @@ const HomeStack = createStackNavigator(
         headerTransparent: true
       })
     },
-    SearchLocation: {
-      screen: SearchLocation,
-      navigationOptions: ({ navigation }) => ({
-        header: <></>,
-      }),
-    }
   },
   {
     cardStyle: {
@@ -203,12 +207,18 @@ const SelectLanguageStack = createStackNavigator({
 
 
 const TripRouteStack = createStackNavigator({
-  SelectLanguage: {
+  PlanningTrip: {
+    screen: PlanningTrip,
+    navigation: ({ navigation }) => ({
+      header: <Header title={i18n.t('header.PlanningTrip')} navigation={navigation} />
+    })
+  },
+  TripRoute: {
     screen: TripRoute,
     navigationOptions: ({ navigation }) => ({
       header: <Header title={i18n.t('header.TripRoute')} navigation={navigation} />
     })
-  }
+  },
 },{
   cardStyle: {
     backgroundColor: "#F8F9FE"
@@ -216,35 +226,9 @@ const TripRouteStack = createStackNavigator({
   transitionConfig
 });
 
-// const PlaceDetailStack = createStackNavigator(
-//   {
-//     PlaceDetail: {
-//       screen: PlaceDetail,
-//       navigationOptions: ({ navigation }) => ({
-//         header: (
-//           <Header white transparent title="Detail" iconColor={'#FFF'} navigation={navigation} />
-//         ),
-//         headerTransparent: true
-//       })
-//     }
-//   },
-//   {
-//     cardStyle: { backgroundColor: "#FFFFFF" },
-//     transitionConfig
-//   }
-// );
 
-// divideru se baga ca si cum ar fi un ecrna dar nu-i nimic duh
 const AppStack = createDrawerNavigator(
   {
-    Home: {
-      screen: HomeStack,
-      navigationOptions: navOpt => ({
-        drawerLabel: ({ focused }) => (
-          <DrawerItem focused={focused} title={i18n.t('navigationBar.Home')} />
-        )
-      })
-    },
     TripRoute: {
       screen: TripRouteStack,
       navigationOptions: navOpt => ({
@@ -253,6 +237,14 @@ const AppStack = createDrawerNavigator(
         )
       })
     },  
+    Home: {
+      screen: HomeStack,
+      navigationOptions: navOpt => ({
+        drawerLabel: ({ focused }) => (
+          <DrawerItem focused={focused} title={i18n.t('navigationBar.Home')} />
+        )
+      })
+    },
     Profile: {
       screen: ProfileStack,
       navigationOptions: navOpt => ({
@@ -261,22 +253,22 @@ const AppStack = createDrawerNavigator(
         )
       })
     },
-    // Elements: {
-    //   screen: ElementsStack,
-    //   navigationOptions: navOpt => ({
-    //     drawerLabel: ({ focused }) => (
-    //       <DrawerItem focused={focused} screen="Elements" title="Elements" />
-    //     )
-    //   })
-    // },
-    // Articles: {
-    //   screen: ArticlesStack,
-    //   navigationOptions: navOpt => ({
-    //     drawerLabel: ({ focused }) => (
-    //       <DrawerItem focused={focused} screen="Articles" title="Articles" />
-    //     )
-    //   })
-    // },
+    Elements: {
+      screen: ElementsStack,
+      navigationOptions: navOpt => ({
+        drawerLabel: ({ focused }) => (
+          <DrawerItem focused={focused} screen="Elements" title="Elements" />
+        )
+      })
+    },
+    Articles: {
+      screen: ArticlesStack,
+      navigationOptions: navOpt => ({
+        drawerLabel: ({ focused }) => (
+          <DrawerItem focused={focused} screen="Articles" title="Articles" />
+        )
+      })
+    },
     Language: {
       screen: SelectLanguageStack,
       navigationOptions: navOpt => ({
