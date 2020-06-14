@@ -14,6 +14,8 @@ const defaultProfilePicture = require("../assets/imgs/defaultProfile.jpg")
 const bgPink = require("../assets/imgs/background_pink.png")
 const travelBg = require("../assets/imgs/travel_bg.png")
 const travelBgBot = require("../assets/imgs/travel_bg_bottom.png")
+const location = require("../assets/imgs/location.png")
+const pinIcon = require("../assets/imgs/pin_icon.png")
 // internet imgs
 
 const ProfilePicture = defaultProfilePicture;
@@ -49,5 +51,7 @@ export default {
   VietNamFlag,
   bgPink,
   travelBg,
-  travelBgBot
+  travelBgBot,
+  location,
+  pinIcon
 };

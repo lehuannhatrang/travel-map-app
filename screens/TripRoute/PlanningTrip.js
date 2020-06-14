@@ -59,37 +59,43 @@ class PlanningTip extends React.Component {
               "id": 0,
               "type": "RESTAURANT",
               "beginTime": "8:00",
-              "endTime": "9:00"
+              "endTime": "9:00",
+              "title": "Ăn sáng"
             },
             {
               "id": 1,
               "type": "VISIT",
               "beginTime": "9:00",
-              "endTime": "12:00"
+              "endTime": "12:00",
+              "title": "Tham quan"
             },
             {
               "id": 0,
               "type": "RESTAURANT",
               "beginTime": "12:00",
-              "endTime": "13:00"
+              "endTime": "13:00",
+              "title": "Bữa trưa"
             },
             {
               "id": 1,
               "type": "VISIT",
               "beginTime": "13:00",
-              "endTime": "17:00"
+              "endTime": "17:00",
+              "title": "Tham quan"
             },
             {
               "id": 0,
               "type": "RESTAURANT",
               "beginTime": "17:00",
-              "endTime": "19:00"
+              "endTime": "19:00",
+              "title": "Bữa tôi"
             },
             {
               "id": 1,
               "type": "VISIT",
               "beginTime": "19:00",
-              "endTime": "22:00"
+              "endTime": "22:00",
+              "title": "Vui chơi"
             }
         ]
 
@@ -111,7 +117,10 @@ class PlanningTip extends React.Component {
     convertTimelineData(route) {
       const timelineData = route.route.map(place => ({
        time: place.planning.beginTime,
-       title: place.planning.type,
+       title: place.planning.title,
+       icon: <Image
+            style={{width: 30, height: 30, backgroundColor: 'white', paddingTop: 10}}
+            source={Images.pinIcon}/>,
        description: <Block style={{marginBottom: 20, marginTop: 10}}>
            <Block row>
               <Image
@@ -135,7 +144,6 @@ class PlanningTip extends React.Component {
     render() {
         return (
           <View style={styles.container}>
-
             <Block flex style={{ marginTop: theme.SIZES.BASE / 2 }}>
               <ScrollView
                 horizontal={true}
@@ -156,15 +164,16 @@ class PlanningTip extends React.Component {
                     style={styles.timeline}
                     data={this.convertTimelineData(route)}
                     circleSize={20}
-                    circleColor='rgb(45,156,219)'
-                    lineColor='rgb(45,156,219)'
+                    circleColor='rgba(0,0,0,0)'
+                    // circleColor='rgb(45,156,219)'
+                    // lineColor='rgb(45,156,219)'
                     timeContainerStyle={{minWidth:52}}
                     timeStyle={{textAlign: 'center', backgroundColor: theme.COLORS.PRIMARY, color:'white', padding:5, borderRadius:13}}
                     descriptionStyle={{color:'gray'}}
                     options={{
                       style:{}
                     }}
-                    innerCircle={'dot'}
+                    innerCircle={'icon'}
                   />
                 ))}
               </ScrollView>
