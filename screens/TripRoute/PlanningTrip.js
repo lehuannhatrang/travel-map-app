@@ -25,31 +25,12 @@ const { width, height } = Dimensions.get("screen");
 
 const cardWidth = width - theme.SIZES.BASE * 2;
 
-const categories = [
-  {
-    title: "Music Album",
-    description:
-      "Rock music is a genre of popular music. It developed during and after the 1960s in the United Kingdom.",
-    image:
-      "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?fit=crop&w=840&q=80",
-    price: "$125"
-  },
-  {
-    title: "Events",
-    description:
-      "Rock music is a genre of popular music. It developed during and after the 1960s in the United Kingdom.",
-    image:
-      "https://images.unsplash.com/photo-1543747579-795b9c2c3ada?fit=crop&w=840&q=80",
-    price: "$35"
-  }
-];
-
-
 class PlanningTip extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-          suggestionRoutes: []
+          suggestionRoutes: [],
+          routeIndex: 0
         }
     }
 
@@ -60,42 +41,48 @@ class PlanningTip extends React.Component {
               "type": "RESTAURANT",
               "beginTime": "8:00",
               "endTime": "9:00",
-              "title": "Ăn sáng"
+              "title": "Ăn sáng",
+              "category": [2,3,4,5,10]
             },
             {
               "id": 1,
               "type": "VISIT",
               "beginTime": "9:00",
               "endTime": "12:00",
-              "title": "Tham quan"
+              "title": "Tham quan",
+              "category": [12,13,14,21,22,23,24,32,37,42]
             },
             {
               "id": 0,
               "type": "RESTAURANT",
               "beginTime": "12:00",
               "endTime": "13:00",
-              "title": "Bữa trưa"
+              "title": "Bữa trưa",
+              "category": [1,2,4,6,7,8,10,25]
             },
             {
               "id": 1,
               "type": "VISIT",
               "beginTime": "13:00",
               "endTime": "17:00",
-              "title": "Tham quan"
+              "title": "Tham quan",
+              "category": [12,13,14,15,21,22,23,24,27,32,37,42]
             },
             {
               "id": 0,
               "type": "RESTAURANT",
               "beginTime": "17:00",
               "endTime": "19:00",
-              "title": "Bữa tôi"
+              "title": "Bữa tối",
+              "category": [1,2,4,6,7,8,10,25]
             },
             {
               "id": 1,
               "type": "VISIT",
               "beginTime": "19:00",
               "endTime": "22:00",
-              "title": "Vui chơi"
+              "title": "Vui chơi",
+              "category": [9,13,15,14,21,27,28,29,37]
             }
         ]
 
@@ -118,9 +105,11 @@ class PlanningTip extends React.Component {
       const timelineData = route.route.map(place => ({
        time: place.planning.beginTime,
        title: place.planning.title,
-       icon: <Image
-            style={{width: 30, height: 30, backgroundColor: 'white', paddingTop: 10}}
-            source={Images.pinIcon}/>,
+       icon: (
+        <View style={{backgroundColor: 'white', paddingVertical: 8, marginTop: 15}}>
+          <Image style={{width: 30, height: 30}} source={Images.pinIcon}/>
+        </View>),
+
        description: <Block style={{marginBottom: 20, marginTop: 10}}>
            <Block row>
               <Image
@@ -128,9 +117,9 @@ class PlanningTip extends React.Component {
                resizeMode="cover"
                style={styles.placeAvatar}
                />
-               <Text bold color="#525F7F" style={{marginLeft: 5, flex: 1, flexWrap: 'wrap'}}>{place.place.name}</Text>
+               <Text bold color="#525F7F" style={{marginLeft: 5, flex: 1, flexWrap: 'wrap', marginTop: 5}}>{place.place.name}</Text>
            </Block>
-           <Block row>
+           <Block row style={{marginTop: 5}}>
               <Text color="#525F7F">{place.place.streetAddress}</Text>
            </Block>
            <Block row>
@@ -141,42 +130,71 @@ class PlanningTip extends React.Component {
       return timelineData
     }
 
+    getPageIndex(xValue, pageWidth) {
+      const result = Math.floor(xValue/pageWidth)
+      if(result < 0) {
+        return 0
+      }
+      return result
+    }
+
     render() {
+      const { suggestionRoutes, routeIndex } = this.state;
+        const { navigation } = this.props; 
         return (
           <View style={styles.container}>
-            <Block flex style={{ marginTop: theme.SIZES.BASE / 2 }}>
+            <Block flex={1} style={{marginTop: theme.SIZES.BASE / 2 }}>
+              <Block middle style={{marginBottom: 20}}>
+                <Text size={26} color={theme.COLORS.PRIMARY}>We have some plans for you</Text>
+              </Block>
               <ScrollView
+                style={{height: "80%"}}
+                onViewableItemsChanged={(viewableItems, changed) => {console.log(viewableItems, changed)}}
                 horizontal={true}
                 pagingEnabled={true}
                 decelerationRate={0}
+                overScrollMode="never"
                 scrollEventThrottle={16}
                 snapToAlignment="center"
+                onScroll={e => this.setState({routeIndex: this.getPageIndex(e.nativeEvent.contentOffset.x, width) })}
                 showsHorizontalScrollIndicator={false}
-                snapToInterval={cardWidth + theme.SIZES.BASE * 0.375}
+                // snapToInterval={cardWidth + theme.SIZES.BASE * 0.375}
+                snapToInterval={width}
                 contentContainerStyle={{
-                  
+                  width: width*3,
                   // paddingHorizontal: theme.SIZES.BASE / 2
+                  padding: 0
                 }}
               >
-                {this.state.suggestionRoutes.map((route, index) => (
-                  <Timeline 
-                    key={`timeline-${index}`}
-                    style={styles.timeline}
-                    data={this.convertTimelineData(route)}
-                    circleSize={20}
-                    circleColor='rgba(0,0,0,0)'
-                    // circleColor='rgb(45,156,219)'
-                    // lineColor='rgb(45,156,219)'
-                    timeContainerStyle={{minWidth:52}}
-                    timeStyle={{textAlign: 'center', backgroundColor: theme.COLORS.PRIMARY, color:'white', padding:5, borderRadius:13}}
-                    descriptionStyle={{color:'gray'}}
-                    options={{
-                      style:{}
-                    }}
-                    innerCircle={'icon'}
-                  />
+                {suggestionRoutes.map((route, index) => (
+                    <Timeline 
+                      key={`timeline-${index}`}
+                      style={styles.timeline}
+                      data={this.convertTimelineData(route)}
+                      circleSize={20}
+                      circleColor='rgba(0,0,0,0)'
+                      // circleColor='rgb(45,156,219)'
+                      // lineColor='rgb(45,156,219)'
+                      timeContainerStyle={{minWidth:52}}
+                      timeStyle={{textAlign: 'center', backgroundColor: theme.COLORS.PRIMARY, color:'white', padding:5, borderRadius:13}}
+                      descriptionStyle={{color:'gray'}}
+                      options={{
+                        style:{}
+                      }}
+                      innerCircle={'icon'}
+                    />
                 ))}
               </ScrollView>
+
+              <Block flex={1} row space="around" style={{margin: 0, paddingHorizontal: -10}}>
+                <Button size="small" style={{borderRadius: 0, color: theme.COLORS.PRIMARY}}
+                onPress={() => {
+                  navigation.navigate("TripRouteMapVIew", {route: suggestionRoutes[routeIndex]})
+                }}>
+                  View on Map
+                </Button>
+                <Button size="small" style={{borderRadius: 0}} color='error'>I love it</Button>
+              </Block>
             </Block>
           </View>
         );
@@ -198,14 +216,15 @@ const styles = StyleSheet.create({
       height: Dimensions.get('window').height,
     },
     timeline: {
-      flex: 1,
+      flex: 9,
       width: Dimensions.get('window').width,
-      padding: 0,
+      padding: 10,
       // marginHorizontal: theme.SIZES.BASE,
       shadowColor: "black",
       shadowOffset: { width: 0, height: 7 },
       shadowRadius: 10,
-      shadowOpacity: 0.2
+      shadowOpacity: 0.2,
+      backgroundColor: 'white'
     },
     productImage: {
       width: cardWidth - theme.SIZES.BASE,

@@ -24,6 +24,7 @@ import SelectLanguage from "../screens/SelectLanguage";
 import TripRoute from "../screens/TripRoute";
 import ViewOnMap from "../screens/PlaceDetail/viewOnMap";
 import PlanningTrip from "../screens/TripRoute/PlanningTrip";
+import TripRouteMapVIew from "../screens/TripRoute/PlanningTripMapView"
 // drawer
 import Menu from "./Menu";
 import DrawerItem from "../components/DrawerItem";
@@ -219,6 +220,12 @@ const TripRouteStack = createStackNavigator({
       header: <Header title={i18n.t('header.TripRoute')} navigation={navigation} />
     })
   },
+  TripRouteMapVIew: {
+    screen: TripRouteMapVIew,
+    navigationOptions: ({ navigation }) => ({
+      header: <Header title={i18n.t('header.PlanningTrip')} navigation={navigation} />
+    })
+  }
 },{
   cardStyle: {
     backgroundColor: "#F8F9FE"

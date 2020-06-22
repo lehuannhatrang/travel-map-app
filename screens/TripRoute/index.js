@@ -6,7 +6,9 @@ import {
   TouchableOpacity,
   AsyncStorage,
   ImageBackground,
+  DatePickerAndroid,
   DatePickerIOS,
+  Platform,
   ActivityIndicator
 } from "react-native";
 import MapView from 'react-native-maps';
@@ -16,8 +18,9 @@ import { Block, Checkbox, Text, theme, Card } from "galio-framework";
 
 import { Button, Icon, Input } from "../../components";
 import { Images, argonTheme } from "../../constants";
-import RNDateTimePicker from '@react-native-community/datetimepicker';
 import i18n from 'i18n-js';
+import DateTimePicker from '@react-native-community/datetimepicker';
+
 
 const { width, height } = Dimensions.get("screen");
 
@@ -36,6 +39,8 @@ class PickDate extends React.Component {
             mapType: 'standard',
             chosenDate: new Date(),
             mode: 'date',
+            chosenDate: new Date(),
+            showPicker: true
         }
     }
 
@@ -62,8 +67,8 @@ class PickDate extends React.Component {
     }
 
     render() {
-        const { initialRegion, mapType, mode, date } = this.state;
-        const { places } = this.props;
+        const { mode, showPicker, chosenDate } = this.state;
+        const { places, navigation } = this.props;
         return (
             <View style={styles.container}>
                 <ImageBackground
@@ -77,15 +82,37 @@ class PickDate extends React.Component {
                         <Text size={18} muted>to travel with us</Text>
                     </Block>
                     <Block style={{flex: 10}}>
-                        <DatePickerIOS style={styles.datePicker} date={this.state.chosenDate} mode="date" onDateChange={newDate => {}} />
+                        {/* {Platform.OS==='ios' && <DatePickerIOS style={styles.datePicker} date={this.state.chosenDate} mode="date" onDateChange={newDate => {}} />} */}
+                        <View style={{flex:1}}>
+                            {!!showPicker && <DateTimePicker
+                            style={{}}
+                            value={chosenDate}
+                            mode={mode}
+                            is24Hour={true}
+                            display="default"
+                            onChange={(e, date) => {
+                                this.setState({
+                                    chosenDate: date,
+                                })
+                                if(Platform.OS!=='ios') {
+                                    this.setState({
+                                        showPicker: false
+                                    })
+                                    navigation.navigate('PlanningTrip', {
+                                        travelDate: date
+                                    })
+                                }
+                            }}
+                            />}
+                        </View>
                     </Block>
-                    <Block row>
-                        <Button style={{width: "100%"}}>
+                    {Platform.OS==='ios' && <Block row>
+                        <Button style={{width: "100%"}} onPress={() => navigation.navigate('PlanningTrip', {travelDate: chosenDate})}>
                             <Text size={20} color="white">
                                 Let's go
                             </Text>
                         </Button>
-                    </Block>
+                    </Block>}
                 </ImageBackground>
             </View>
         );
@@ -114,6 +141,8 @@ const styles = StyleSheet.create({
     },
     datePicker: {
         width: "100%",
+        height: 400,
+        backgroundColor:'red',
         color: "white",
         backgroundColor: "rgba(255, 255, 255, 0.4)"
     }

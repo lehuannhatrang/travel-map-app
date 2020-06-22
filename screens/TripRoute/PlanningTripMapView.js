@@ -5,10 +5,12 @@ import {
   View,
   TouchableOpacity,
   AsyncStorage,
+  Image,
   ActivityIndicator
 } from "react-native";
 import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
+import MapViewDirections from 'react-native-maps-directions';
 
 import { Block, Checkbox, Text, theme, Card } from "galio-framework";
 
@@ -25,21 +27,24 @@ const defaultInitalRegion = {
     longitudeDelta: 0.2,
 }
 
-class TripRoute extends React.Component {
+class TripRouteMapVIew extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             initialRegion: '',
-            mapType: 'standard'
+            mapType: 'standard',
+            route: ''
         }
     }
 
     componentDidMount() {
+        const { navigation } = this.props;
+        const route = navigation.state.params ? navigation.state.params.route : null;
+        this.setState({route})
         AsyncStorage.getItem('currentLocation')
         .then(location => {
             if(!!location) {
                 const currentLocation = JSON.parse(location)
-                console.log(currentLocation)
                 const newInitRegion = {
                     latitude: currentLocation.coords.latitude,
                     longitude: currentLocation.coords.longitude,
@@ -57,7 +62,7 @@ class TripRoute extends React.Component {
     }
 
     render() {
-        const { initialRegion, mapType } = this.state;
+        const { initialRegion, mapType, route } = this.state;
         const { places } = this.props;
         return (
             <View style={styles.container}>
@@ -65,7 +70,40 @@ class TripRoute extends React.Component {
                     <MapView style={styles.mapStyle} initialRegion={initialRegion} 
                     showsUserLocation={true} followUserLocation={true} mapType={mapType}
                     >
-                        {/* <Marker coordinate={initialRegion} title={'Leehun'} description={'ok'} draggable/> */}
+                        {route.route.map((place, index) => (
+                            <Marker 
+                            key={`place-${index}`}
+                            coordinate={{
+                                latitude: parseFloat(place.place.latitude),
+                                longitude: parseFloat(place.place.longitude),
+                            }} 
+                            isPreselected={true} 
+                            title={place.place.name} 
+                            description={place.place.address}>
+                                <View style={styles.placeTitleContent}>
+                                    <Image source={require('../../assets/imgs/pin_icon.png')} style={{height: 35, width:35 }} />
+                                    <Text style={styles.placeTitle}>{place.place.name}</Text>
+                                </View>
+                            </Marker>
+                        ))}
+                        {route.route.map((place, index) => 
+                            <>
+                                {index > 0 && <MapViewDirections
+                                    key={`direction-${index}`}
+                                    origin={{
+                                        latitude: parseFloat(route.route[index-1].place.latitude),
+                                        longitude: parseFloat(route.route[index-1].place.longitude),
+                                    }}
+                                    destination={{
+                                        latitude: parseFloat(place.place.latitude),
+                                        longitude: parseFloat(place.place.longitude),
+                                    }}
+                                    apikey={'AIzaSyCNlPrpNK1ZqynQJJcdDwiowCzS_AViU-Q'}
+                                    strokeWidth={6}
+                                    strokeColor={index == 1 ? "#3399ff" : "#00ccff"}
+                                />}
+                            </>
+                        )}
                     </MapView>
                 }
                 {!initialRegion && <ActivityIndicator size="large" color="#0000ff" style={{marginTop: 100}} />}
@@ -74,7 +112,7 @@ class TripRoute extends React.Component {
     }
 }
 
-TripRoute.defaultProps = {
+TripRouteMapVIew.defaultProps = {
     places: []
 }
 
@@ -89,6 +127,23 @@ const styles = StyleSheet.create({
       width: Dimensions.get('window').width,
       height: Dimensions.get('window').height,
     },
+    placeTitleContent: {
+        alignItems: 'center', 
+        justifyContent: 'center',
+        display: "flex", 
+        // flexDirection: "row"
+    },
+    placeTitle : {
+        fontSize:12,
+        color:'red',
+        // fontFamily:'Times New Roman',
+        // paddingLeft:10,
+        // paddingRight:100,
+        // textShadowColor:'black',
+        // textShadowOffset:{width: 0, height: 0},
+        // textShadowRadius: 3,
+        fontWeight: '800',
+    }
 });
 
-export default TripRoute;
+export default TripRouteMapVIew;
