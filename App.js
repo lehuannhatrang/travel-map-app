@@ -103,7 +103,7 @@ export default class App extends React.Component {
 
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     AsyncStorage.getItem('accessToken')
     .then(accessToken => {
       if(!accessToken) return this.setState({isAuthorized: false});

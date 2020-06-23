@@ -3,12 +3,9 @@ import {
   ScrollView,
   StyleSheet,
   Image,
-  TouchableWithoutFeedback,
   Dimensions,
   View,
   Animated,
-  TouchableOpacity,
-  AsyncStorage,
   ActivityIndicator
 } from "react-native";
 import { Block, Checkbox, Text, theme, Card } from "galio-framework";
@@ -30,7 +27,8 @@ class PlanningTip extends React.Component {
         super(props);
         this.state = {
           suggestionRoutes: [],
-          routeIndex: 0
+          routeIndex: 0,
+          loading: true
         }
     }
 
@@ -88,7 +86,10 @@ class PlanningTip extends React.Component {
 
         HttpUtil.postJsonAuthorization('/planning-trip/suggestion-trips', {planning: defaultPlanning})
         .then(data => {
-          this.setState({suggestionRoutes: data.routes})
+          this.setState({
+            suggestionRoutes: data.routes,
+            loading: false
+          })
         })
     }
 
@@ -139,7 +140,7 @@ class PlanningTip extends React.Component {
     }
 
     render() {
-      const { suggestionRoutes, routeIndex } = this.state;
+      const { suggestionRoutes, routeIndex, loading } = this.state;
         const { navigation } = this.props; 
         return (
           <View style={styles.container}>
@@ -147,6 +148,7 @@ class PlanningTip extends React.Component {
               <Block middle style={{marginBottom: 20}}>
                 <Text size={26} color={theme.COLORS.PRIMARY}>We have some plans for you</Text>
               </Block>
+              {!!loading && <ActivityIndicator size="large" color="#0000ff" style={{marginTop: 100, justifySelf: "center"}} />}
               <ScrollView
                 style={{height: "80%"}}
                 onViewableItemsChanged={(viewableItems, changed) => {console.log(viewableItems, changed)}}
@@ -165,8 +167,8 @@ class PlanningTip extends React.Component {
                   // paddingHorizontal: theme.SIZES.BASE / 2
                   padding: 0
                 }}
-              >
-                {suggestionRoutes.map((route, index) => (
+              > 
+                {!loading && suggestionRoutes.map((route, index) => (
                     <Timeline 
                       key={`timeline-${index}`}
                       style={styles.timeline}

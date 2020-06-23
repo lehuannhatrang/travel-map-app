@@ -77,7 +77,7 @@ class Card extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
   }
 
   render() {
