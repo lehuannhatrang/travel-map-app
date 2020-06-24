@@ -5,6 +5,7 @@ import {
   Image,
   Dimensions,
   View,
+  TouchableOpacity,
   Animated,
   ActivityIndicator
 } from "react-native";
@@ -102,6 +103,13 @@ class PlanningTip extends React.Component {
       )
     }
 
+    handlePressingPlace(placeId) {
+      const { navigation } = this.props;
+      navigation.navigate('PlaceDetail', {
+        placeId,
+      })
+    }
+
     convertTimelineData(route) {
       const timelineData = route.route.map(place => ({
        time: place.planning.beginTime,
@@ -111,7 +119,7 @@ class PlanningTip extends React.Component {
           <Image style={{width: 30, height: 30}} source={Images.pinIcon}/>
         </View>),
 
-       description: <Block style={{marginBottom: 20, marginTop: 10}}>
+       description: <TouchableOpacity style={{marginBottom: 20, marginTop: 10}} onPress={() => this.handlePressingPlace(place.place.placeId)}>
            <Block row>
               <Image
                source={{ uri: place.place.mainImgUri}}
@@ -126,7 +134,7 @@ class PlanningTip extends React.Component {
            <Block row>
               <Text color="#525F7F">{place.place.addressLocality}</Text>
             </Block>
-       </Block>
+       </TouchableOpacity>
       }))
       return timelineData
     }
@@ -188,7 +196,7 @@ class PlanningTip extends React.Component {
                 ))}
               </ScrollView>
 
-              <Block flex={1} row space="around" style={{margin: 0, paddingHorizontal: -10}}>
+              {!loading && <Block flex={1} row space="around" style={{margin: 0, paddingHorizontal: -10}}>
                 <Button size="small" style={{borderRadius: 0, color: theme.COLORS.PRIMARY}}
                 onPress={() => {
                   navigation.navigate("TripRouteMapVIew", {route: suggestionRoutes[routeIndex]})
@@ -196,7 +204,7 @@ class PlanningTip extends React.Component {
                   View on Map
                 </Button>
                 <Button size="small" style={{borderRadius: 0}} color='error'>I love it</Button>
-              </Block>
+              </Block>}
             </Block>
           </View>
         );

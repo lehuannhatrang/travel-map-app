@@ -10,7 +10,8 @@
         "ratingForm": "Rate",
         "Language": "Language",
         "TripRoute": "Trip route",
-        "PlanningTrip": "Suggestion trip"
+        "PlanningTrip": "Suggestion trip",
+        "RouteMapView": "Route"
     },
     "navigationBar": {
         "Home": "Home",

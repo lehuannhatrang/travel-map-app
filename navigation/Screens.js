@@ -210,7 +210,7 @@ const SelectLanguageStack = createStackNavigator({
 const TripRouteStack = createStackNavigator({
   PlanningTrip: {
     screen: PlanningTrip,
-    navigation: ({ navigation }) => ({
+    navigationOptions: ({ navigation }) => ({
       header: <Header title={i18n.t('header.PlanningTrip')} navigation={navigation} />
     })
   },
@@ -223,9 +223,16 @@ const TripRouteStack = createStackNavigator({
   TripRouteMapVIew: {
     screen: TripRouteMapVIew,
     navigationOptions: ({ navigation }) => ({
-      header: <Header title={i18n.t('header.PlanningTrip')} navigation={navigation} />
+      header: <Header title={i18n.t('header.RouteMapView')} navigation={navigation} back/>
     })
-  }
+  },
+  PlaceDetail: {
+    screen: PlaceDetail,
+    navigationOptions: ({ navigation }) => ({
+      header: null
+      // headerTransparent: true
+    })
+  },
 },{
   cardStyle: {
     backgroundColor: "#F8F9FE"

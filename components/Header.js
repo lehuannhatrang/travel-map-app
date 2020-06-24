@@ -191,9 +191,10 @@ class Header extends React.Component {
           rightStyle={{ alignItems: 'flex-end' }}
           left={
             <Icon 
-              name={back ? 'nav-left' : "menu-8"} family="ArgonExtra" 
-              size={back ? 30 : 14} onPress={this.handleLeftPress} 
-              color={iconColor || argonTheme.COLORS.ICON}/>
+              name={back ? 'nav-left' : "menu-8"} family={"ArgonExtra"} 
+              size={back? 30 : 14} onPress={this.handleLeftPress} 
+              color={iconColor || argonTheme.COLORS.ICON}
+              />
           }
           leftStyle={{ paddingVertical: 12, flex: 0.2 }}
           titleStyle={[
