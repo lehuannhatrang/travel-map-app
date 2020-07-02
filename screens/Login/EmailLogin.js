@@ -45,7 +45,6 @@ class LoginWithEmail extends React.Component {
             }
             HttpUtil.postJson('/auth/login', body)
             .then(result => {
-                console.log('ok', result)
                 console.log('Login successfull')
                 AsyncStorage.setItem('accessToken', result.token)
                 .then(result => {
@@ -54,7 +53,6 @@ class LoginWithEmail extends React.Component {
                 // navigation.navigate("Home");
             })
             .catch(error => {
-                console.log('thot', error)
                 this.setState({
                     loginErrorMessage: 'Failed to login',
                     loading: false

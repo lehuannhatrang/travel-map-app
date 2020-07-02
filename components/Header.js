@@ -1,6 +1,12 @@
 import React from 'react';
 import { withNavigation } from 'react-navigation';
-import { TouchableOpacity, StyleSheet, Platform, Dimensions } from 'react-native';
+import { 
+  TouchableOpacity, 
+  StyleSheet, 
+  Platform, 
+  Dimensions,
+  AsyncStorage
+} from 'react-native';
 import { Button, Block, NavBar, Text, theme } from 'galio-framework';
 
 import Icon from './Icon';
@@ -35,6 +41,17 @@ const BasketButton = ({isWhite, style, navigation}) => (
   </TouchableOpacity>
 );
 
+const ModifiedButton = ({isWhite, style, navigation}) => (
+  <TouchableOpacity style={[styles.button, style]} onPress={() => navigation.navigate('CriteriaPointForm')}>
+    <Icon
+      family="Feather"
+      size={16}
+      name="sliders"
+      color={argonTheme.COLORS[isWhite ? 'WHITE' : 'ICON']}
+    />
+  </TouchableOpacity>
+)
+
 const SearchButton = ({isWhite, style, navigation}) => (
   <TouchableOpacity style={[styles.button, style]} onPress={() => navigation.navigate('Pro')}>
     <Icon
@@ -65,7 +82,7 @@ class Header extends React.Component {
     switch (routeName) {
       case 'Home':
         return ([
-          // <BellButton key='chat-home' navigation={navigation} isWhite={white} />,
+          <ModifiedButton key='chat-home' navigation={navigation} isWhite={white} />,
           // <BasketButton key='basket-home' navigation={navigation} isWhite={white} />
         ]);
       case 'Deals':
@@ -109,16 +126,24 @@ class Header extends React.Component {
   }
   renderSearch = () => {
     const { navigation } = this.props;
+    const keyword = navigation.state.params ? navigation.state.params.keyword || '' : ''
     return (
-      <Input
-        right
-        color="black"
-        style={styles.search}
-        placeholder={`${i18n.t('header.home.searchBar')}?`}
-        placeholderTextColor={'#8898AA'}
-        onFocus={() => navigation.navigate('SearchLocation')}
-        iconContent={<Icon size={16} color={theme.COLORS.MUTED} name="search-zoom-in" family="ArgonExtra" />}
-      />
+      <TouchableOpacity onPress={() => navigation.navigate('SearchLocation', {keyword})}>
+        <Input
+          onPress={() => navigation.navigate('SearchLocation', {keyword})}
+          right
+          pointerEvents="none"
+          color="black"
+          style={styles.search}
+          value={keyword}
+          disabled={true}
+          placeholder={`${i18n.t('header.home.searchBar')}?`}
+          placeholderTextColor={'#8898AA'}
+          onFocus={() => navigation.navigate('SearchLocation', {keyword})}
+          navigation={navigation}
+          iconContent={<Icon size={16} color={theme.COLORS.MUTED} name="search-zoom-in" family="ArgonExtra" />}
+          />
+      </TouchableOpacity>
     );
   }
   renderOptions = () => {
@@ -161,7 +186,7 @@ class Header extends React.Component {
         <Block center>
           {search ? this.renderSearch() : null}
           {/* {options ? this.renderOptions() : null} */}
-          {tabs ? this.renderTabs() : null}
+          {/* {tabs ? this.renderTabs() : null} */}
         </Block>
       );
     }

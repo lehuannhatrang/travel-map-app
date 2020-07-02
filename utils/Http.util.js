@@ -101,7 +101,6 @@ class HttpUtil {
     static postJsonAuthorization(path, data, headers) {
         return AsyncStorage.getItem('accessToken')
         .then(accessToken => {
-            console.log(accessToken)
             headers = {...headers, Authorization: accessToken}
             return HttpUtil.makeJsonRequest('POST', path, data, headers);
         })
@@ -110,7 +109,6 @@ class HttpUtil {
     static putJsonAuthorization(path, data, headers) {
         return AsyncStorage.getItem('accessToken')
         .then(accessToken => {
-            console.log(accessToken)
             headers = {...headers, Authorization: accessToken}
             return HttpUtil.makeJsonRequest('PUT', path, data, headers);
         })
@@ -119,7 +117,6 @@ class HttpUtil {
     static deleteJsonAuthorization(path, data, headers) {
         return AsyncStorage.getItem('accessToken')
         .then(accessToken => {
-            console.log(accessToken)
             headers = {...headers, Authorization: accessToken}
             return HttpUtil.makeJsonRequest('DELETE', path, data, headers);
         })
@@ -128,7 +125,6 @@ class HttpUtil {
     static postMultipartAuthorization(path, data, headers) {
         return AsyncStorage.getItem('accessToken')
         .then(accessToken => {
-            console.log(accessToken)
             headers = {...headers, Authorization: accessToken}
             return HttpUtil.makeMultipartRequest('POST', path, data, headers);
         })

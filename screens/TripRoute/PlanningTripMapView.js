@@ -120,7 +120,7 @@ class TripRouteMapVIew extends React.Component {
         if(!!route) {
             console.log(route.route[currentDestinationIndex])
         }
-        const { places } = this.props;
+        const { places, navigation } = this.props;
         return (
             <View style={styles.container}>
                 {!!initialRegion && 
@@ -195,7 +195,7 @@ class TripRouteMapVIew extends React.Component {
                     </>}
                     {!!finish && 
                     <Button uppercase
-                    style={styles.startTripButton} onPress={() => this.nextRoute()}>
+                    style={styles.startTripButton} onPress={() => navigation.navigate('PlanningTrip')}>
                             Finish
                     </Button>
                     }

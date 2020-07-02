@@ -1,7 +1,5 @@
 import i18n from "i18n-js";
 export default categories = [
     { id: 'restaurant', title: 'Restaurant' },
-    { id: 'hotel', title: 'Hotel' },
-    { id: 'resort', title: 'Resort' },
-    { id: 'souvenir', title: 'Souvenir' },
+    { id: 'visiting', title: 'Visiting' },
 ]

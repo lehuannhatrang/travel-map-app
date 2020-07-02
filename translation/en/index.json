@@ -3,6 +3,7 @@
         "home": {
             "searchBar": "Where do you want to go",
             "title": "Home",
+            "criteria": "Modify filter point",
             "category": {
                 "restaurant": "Restaurant"
             }

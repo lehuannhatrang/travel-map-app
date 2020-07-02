@@ -7,7 +7,7 @@ import Input from './Input';
 import Switch from './Switch';
 import Select from './Select';
 import DefaultCard from './DefaultCard';
-
+import TripCard from './TripCard';
 export {
   Button,
   Card,
@@ -17,5 +17,6 @@ export {
   Header,
   Switch, 
   Select,
-  DefaultCard
+  DefaultCard,
+  TripCard
 };

@@ -13,6 +13,8 @@ import CustomModal from "../../components/Modal";
 import { Button, Icon, Input } from "../../components";
 import { Images, argonTheme } from "../../constants";
 import HttpUtil from "../../utils/Http.util";
+import * as Linking from 'expo-linking';
+
 
 const { width, height } = Dimensions.get("screen");
 
@@ -91,13 +93,10 @@ class Register extends React.Component {
         phone,
         password
       }
-      console.log('sending')
       HttpUtil.postJson('/auth/signup', userInfo)
       .then(response => {
-        console.log(responsee)
         if(!!response.userId) {
           this.setState({
-            // isLoading: false,
             signupSuccess: true
           })
           setTimeout(() => {
@@ -131,7 +130,7 @@ class Register extends React.Component {
                   Login with
                 </Text>
                 <Block row style={{ marginTop: theme.SIZES.BASE }}>
-                  <Button style={{ ...styles.socialButtons, marginRight: 30 }}>
+                  {/* <Button style={{ ...styles.socialButtons, marginRight: 30 }}>
                     <Block row>
                       <Icon
                         name="foody-logo"
@@ -142,7 +141,7 @@ class Register extends React.Component {
                       />
                       <Text style={styles.socialTextButtons}>Foody</Text>
                     </Block>
-                  </Button>
+                  </Button> */}
                   <Button style={styles.socialButtons} onPress={() => navigation.navigate("LoginWithEmail")}>
                     <Block row>
                       <Icon
@@ -161,7 +160,7 @@ class Register extends React.Component {
                 <Block flex>
                   <Block flex={0.1} middle>
                     <Text color="#8898AA" size={12}>
-                      Or sign up the classic way
+                      Or sign up the classical way
                     </Text>
                   </Block>
                   <Block flex center>
@@ -272,17 +271,19 @@ class Register extends React.Component {
                         checkboxStyle={{
                           borderWidth: 3
                         }}
+                        initialValue={true}
                         onChange={value => this.setState({isAgreeWithPolicy: value})}
                         color={argonTheme.COLORS.PRIMARY}
                         label="I agree with the"
                       />
                       <Button
-                        style={{ width: 100 }}
+                        style={{ width: 100, borderWidth: 0 }}
                         color="transparent"
                         textStyle={{
                           color: argonTheme.COLORS.PRIMARY,
                           fontSize: 14
                         }}
+                        onPress={() => Linking.openURL("https://guidy.flycricket.io/privacy.html")}
                       >
                         Privacy Policy
                       </Button>

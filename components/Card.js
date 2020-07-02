@@ -131,6 +131,18 @@ class Card extends React.Component {
               </Text>
             </View>}
 
+            {item.addressLocality && <View size={12}  style={{flexDirection:'row', flexWrap:'wrap', flex: 1}}>
+            <Text numberOfLines={1}>  
+              <Icon
+                size={14}
+                style={{marginRight: 5}}
+                color={'green'}
+                name="location-city"
+                family="MaterialIcons"
+              /> {item.addressLocality}
+              </Text>
+            </View>}
+
             {!!distance && <View size={12}  style={{flexDirection:'row', flexWrap:'wrap'}}>
               <Icon
                 size={14}
@@ -164,8 +176,8 @@ const styles = StyleSheet.create({
     backgroundColor: theme.COLORS.WHITE,
     marginVertical: theme.SIZES.BASE,
     borderWidth: 0,
-    minHeight: 114,
-    marginBottom: 16
+    minHeight: 150,
+    marginBottom: 8
   },
   cardTitle: {
     flex: 1,
@@ -183,7 +195,7 @@ const styles = StyleSheet.create({
     // borderRadius: 3,
   },
   horizontalImage: {
-    height: 122,
+    height: 150,
     width: 'auto',
   },
   horizontalStyles: {

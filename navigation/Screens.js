@@ -9,14 +9,14 @@ import {
 import { Block } from "galio-framework";
 
 // screens
-import Home from "../screens/Home";
+import Home from "../screens/Home/Home";
 import Onboarding from "../screens/Onboarding";
 import Pro from "../screens/Pro";
 import Profile from "../screens/Profile";
 import Register from "../screens/Login/Register";
 import Elements from "../screens/Elements";
 import Articles from "../screens/Articles";
-import SearchLocation from "../screens/SearchLocation";
+import SearchLocation from "../screens/Home/SearchLocation";
 import LoginWithEmail from "../screens/Login/EmailLogin";
 import PlaceDetail from "../screens/PlaceDetail";
 import RatingForm from "../screens/PlaceDetail/ratingForm";
@@ -25,6 +25,7 @@ import TripRoute from "../screens/TripRoute";
 import ViewOnMap from "../screens/PlaceDetail/viewOnMap";
 import PlanningTrip from "../screens/TripRoute/PlanningTrip";
 import TripRouteMapVIew from "../screens/TripRoute/PlanningTripMapView"
+import CriteriaPointForm from "../screens/Home/CriteriaPointForm";
 // drawer
 import Menu from "./Menu";
 import DrawerItem from "../components/DrawerItem";
@@ -109,7 +110,26 @@ const ProfileStack = createStackNavigator(
         ),
         headerTransparent: true
       })
-    }
+    },
+    PlanningTrip: {
+      screen: PlanningTrip,
+      navigationOptions: ({ navigation }) => ({
+        header: <Header title={i18n.t('header.PlanningTrip')} navigation={navigation} />
+      })
+    },
+    TripRouteMapVIew: {
+      screen: TripRouteMapVIew,
+      navigationOptions: ({ navigation }) => ({
+        header: <Header title={i18n.t('header.RouteMapView')} navigation={navigation} back/>
+      })
+    },
+    PlaceDetail: {
+      screen: PlaceDetail,
+      navigationOptions: ({ navigation }) => ({
+        header: null
+        // headerTransparent: true
+      })
+    },
   },
   {
     cardStyle: { backgroundColor: "#FFFFFF" },
@@ -125,6 +145,12 @@ const HomeStack = createStackNavigator(
         header: <Header tabs={Categories} search options title={i18n.t('header.home.title')} navigation={navigation} />
       })
     },
+    CriteriaPointForm: {
+      screen: CriteriaPointForm,
+      navigationOptions: ({ navigation }) => ({
+        header: <Header options title={i18n.t('header.home.criteria')} navigation={navigation} />
+      })
+    },
     PlaceDetail: {
       screen: PlaceDetail,
       navigationOptions: ({ navigation }) => ({
@@ -134,13 +160,13 @@ const HomeStack = createStackNavigator(
     },
     ViewOnMap: {
       screen: ViewOnMap,
-      navigationOptions: ({ navigation }) => {console.log(navigation);return{
+      navigationOptions: ({ navigation }) => ({
         drawerLabel: ({ focused }) => (
           <DrawerItem focused={focused} screen="Map" title={i18n.t('header.ratingForm')} />
         ),
         header: <Header back title={navigation.state.params.placeDetail.name} navigation={navigation} />,
         headerTransparent: true
-      }},
+      }),
     },
     RatingForm: {
       screen: RatingForm,
@@ -208,16 +234,16 @@ const SelectLanguageStack = createStackNavigator({
 
 
 const TripRouteStack = createStackNavigator({
-  PlanningTrip: {
-    screen: PlanningTrip,
-    navigationOptions: ({ navigation }) => ({
-      header: <Header title={i18n.t('header.PlanningTrip')} navigation={navigation} />
-    })
-  },
   TripRoute: {
     screen: TripRoute,
     navigationOptions: ({ navigation }) => ({
       header: <Header title={i18n.t('header.TripRoute')} navigation={navigation} />
+    })
+  },
+  PlanningTrip: {
+    screen: PlanningTrip,
+    navigationOptions: ({ navigation }) => ({
+      header: <Header title={i18n.t('header.PlanningTrip')} navigation={navigation} />
     })
   },
   TripRouteMapVIew: {
@@ -243,14 +269,6 @@ const TripRouteStack = createStackNavigator({
 
 const AppStack = createDrawerNavigator(
   {
-    TripRoute: {
-      screen: TripRouteStack,
-      navigationOptions: navOpt => ({
-        drawerLabel: ({ focused }) => (
-          <DrawerItem focused={focused} screen="TripRoute" title={i18n.t('navigationBar.TripRoute')} />
-        )
-      })
-    },  
     Home: {
       screen: HomeStack,
       navigationOptions: navOpt => ({
@@ -259,6 +277,14 @@ const AppStack = createDrawerNavigator(
         )
       })
     },
+    TripRoute: {
+      screen: TripRouteStack,
+      navigationOptions: navOpt => ({
+        drawerLabel: ({ focused }) => (
+          <DrawerItem focused={focused} screen="TripRoute" title={i18n.t('navigationBar.TripRoute')} />
+        )
+      })
+    },  
     Profile: {
       screen: ProfileStack,
       navigationOptions: navOpt => ({
@@ -267,22 +293,22 @@ const AppStack = createDrawerNavigator(
         )
       })
     },
-    Elements: {
-      screen: ElementsStack,
-      navigationOptions: navOpt => ({
-        drawerLabel: ({ focused }) => (
-          <DrawerItem focused={focused} screen="Elements" title="Elements" />
-        )
-      })
-    },
-    Articles: {
-      screen: ArticlesStack,
-      navigationOptions: navOpt => ({
-        drawerLabel: ({ focused }) => (
-          <DrawerItem focused={focused} screen="Articles" title="Articles" />
-        )
-      })
-    },
+    // Elements: {
+    //   screen: ElementsStack,
+    //   navigationOptions: navOpt => ({
+    //     drawerLabel: ({ focused }) => (
+    //       <DrawerItem focused={focused} screen="Elements" title="Elements" />
+    //     )
+    //   })
+    // },
+    // Articles: {
+    //   screen: ArticlesStack,
+    //   navigationOptions: navOpt => ({
+    //     drawerLabel: ({ focused }) => (
+    //       <DrawerItem focused={focused} screen="Articles" title="Articles" />
+    //     )
+    //   })
+    // },
     Language: {
       screen: SelectLanguageStack,
       navigationOptions: navOpt => ({

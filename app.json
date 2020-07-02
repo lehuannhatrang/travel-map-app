@@ -9,11 +9,15 @@
     ],
     "version": "1.3.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo.png",
     "splash": {
       "image": "./assets/splash_2.png",
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
+    },
+    "android": {
+      "package": "com.leehun.guidy",
+      "versionCode": 2
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -24,6 +28,6 @@
     "ios": {
       "supportsTablet": true
     },
-    "description": "Travel Map for tourism"
+    "description": "Tìm kiếm những địa điểm và lên lịch trình cho chuyến du lịch của bạn."
   }
 }

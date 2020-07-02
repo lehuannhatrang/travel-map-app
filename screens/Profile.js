@@ -19,6 +19,8 @@ import HttpUtil from "../utils/Http.util";
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
+import { TripCard } from "../components";
+import { isLoading } from "expo-font";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -29,6 +31,8 @@ class Profile extends React.Component {
     super(props);
     this.state = {
       currentUser: '',
+      trips: [],
+      isLoading: true
     }
     this.getPermissionAsync = this.getPermissionAsync.bind(this);
     this.handlePickImage = this.handlePickImage.bind(this);
@@ -38,6 +42,13 @@ class Profile extends React.Component {
     HttpUtil.getJsonAuthorization('/user')
     .then(currentUser => {
       this.setState({currentUser})
+    })
+    HttpUtil.getJsonAuthorization('/user/my-trips')
+    .then(data => {
+      this.setState({
+        trips: data,
+        isLoading: false
+      })
     })
   }
 
@@ -78,8 +89,43 @@ class Profile extends React.Component {
     })
   }
 
+  handleViewTrip(id) {
+    const { navigation } = this.props;
+    navigation.navigate('PlanningTrip', {
+      id
+    })
+  }
+
+  handleDeleteTrip(id) {
+    this.setState({isLoading: true})
+    HttpUtil.deleteJsonAuthorization('/user/trip', {id})
+    .then(response => {
+      HttpUtil.getJsonAuthorization('/user/my-trips')
+      .then(data => {
+        this.setState({
+          trips: data,
+          isLoading: false
+        })
+      })
+    })
+  }
+
+  refresh() {
+    HttpUtil.getJsonAuthorization('/user')
+    .then(currentUser => {
+      this.setState({currentUser})
+    })
+    HttpUtil.getJsonAuthorization('/user/my-trips')
+    .then(data => {
+      this.setState({
+        trips: data,
+        isLoading: false
+      })
+    })
+  }
+
   render() {
-    const { currentUser } = this.state;
+    const { currentUser, trips, isLoading } = this.state;
     if (!currentUser) return <ActivityIndicator size="large" color="#0000ff" style={{marginTop: 100}} />
     return (
       <Block flex style={styles.profile}>
@@ -108,13 +154,14 @@ class Profile extends React.Component {
                     middle
                     row
                     space="evenly"
-                    style={{ marginTop: 20, paddingBottom: 24 }}
+                    style={{ marginTop: 20, paddingBottom: 10 }}
                   >
                     <Button
                       small
                       style={{ backgroundColor: argonTheme.COLORS.INFO }}
+                      onPress={() => this.refresh()}
                     >
-                      Edit
+                      Refresh
                     </Button>
                     <Button
                       small
@@ -123,41 +170,6 @@ class Profile extends React.Component {
                     >
                       LOG OUT
                     </Button>
-                  </Block>
-                  <Block row space="between">
-                    <Block middle>
-                      <Text
-                        bold
-                        size={12}
-                        color="#525F7F"
-                        style={{ marginBottom: 4 }}
-                      >
-                        2K
-                      </Text>
-                      <Text size={12}>Orders</Text>
-                    </Block>
-                    <Block middle>
-                      <Text
-                        bold
-                        color="#525F7F"
-                        size={12}
-                        style={{ marginBottom: 4 }}
-                      >
-                        10
-                      </Text>
-                      <Text size={12}>Photos</Text>
-                    </Block>
-                    <Block middle>
-                      <Text
-                        bold
-                        color="#525F7F"
-                        size={12}
-                        style={{ marginBottom: 4 }}
-                      >
-                        89
-                      </Text>
-                      <Text size={12}>Comments</Text>
-                    </Block>
                   </Block>
                 </Block>
                 <Block flex>
@@ -168,6 +180,9 @@ class Profile extends React.Component {
                     <Text size={16} color="#32325D" style={{ marginTop: 10 }}>
                       {currentUser.email}
                     </Text>
+                    <Text size={16} color="#32325D" style={{ marginTop: 10 }}>
+                      {currentUser.phone}
+                    </Text>
                   </Block>
                   <Block middle style={{ marginTop: 30, marginBottom: 16 }}>
                     <Block style={styles.divider} />
@@ -176,175 +191,35 @@ class Profile extends React.Component {
                     <Text
                       size={16}
                       color="#525F7F"
-                      style={{ textAlign: "center" }}
+                      style={{ textAlign: "center", marginHorizontal: 20 }}
                     >
-                      An artist of considerable range, Jessica name taken by
-                      Melbourne …
+                      {`Hello ${currentUser.displayName}, you can find your trip down here.`}
                     </Text>
-                    <Button
-                      color="transparent"
-                      textStyle={{
-                        color: "#233DD2",
-                        fontWeight: "500",
-                        fontSize: 16
-                      }}
-                    >
-                      Show more
-                    </Button>
                   </Block>
                   <Block
                     row
+                    space="between"
                     style={{ paddingVertical: 14, alignItems: "baseline" }}
                   >
                     <Text bold size={16} color="#525F7F">
-                      Album
+                      My trips
                     </Text>
                   </Block>
-                  <Block
-                    row
-                    style={{ paddingBottom: 20, justifyContent: "flex-end" }}
-                  >
-                    <Button
-                      small
-                      color="transparent"
-                      textStyle={{ color: "#5E72E4", fontSize: 12 }}
-                    >
-                      View all
-                    </Button>
-                  </Block>
-                  <Block style={{ paddingBottom: -HeaderHeight * 2 }}>
-                    <Block row space="between" style={{ flexWrap: "wrap" }}>
-                      {Images.Viewed.map((img, imgIndex) => (
-                        <Image
-                          source={{ uri: img }}
-                          key={`viewed-${img}`}
-                          resizeMode="cover"
-                          style={styles.thumb}
-                        />
-                      ))}
-                    </Block>
-                  </Block>
+                  {!!isLoading && <ActivityIndicator size="large" color="#0000ff" style={{marginTop: 100}} />}
+                  {trips.map(trip => 
+                  <TripCard tripDate={trip.date} 
+                  id={trip._id}
+                  onPress={(id) => this.handleViewTrip(id) }
+                  onDelete={id => this.handleDeleteTrip(id)}
+                  />)}
+
+                  {!isLoading && trips.length === 0 && <Text size={16} color={theme.COLORS.MUTED}>No trip found</Text>}
+                  
                 </Block>
               </Block>
             </ScrollView>
           </ImageBackground>
         </Block>
-        {/* <ScrollView showsVerticalScrollIndicator={false} 
-                    contentContainerStyle={{ flex: 1, width, height, zIndex: 9000, backgroundColor: 'red' }}>
-        <Block flex style={styles.profileCard}>
-          <Block middle style={styles.avatarContainer}>
-            <Image
-              source={{ uri: Images.ProfilePicture }}
-              style={styles.avatar}
-            />
-          </Block>
-          <Block style={styles.info}>
-            <Block
-              middle
-              row
-              space="evenly"
-              style={{ marginTop: 20, paddingBottom: 24 }}
-            >
-              <Button small style={{ backgroundColor: argonTheme.COLORS.INFO }}>
-                CONNECT
-              </Button>
-              <Button
-                small
-                style={{ backgroundColor: argonTheme.COLORS.DEFAULT }}
-              >
-                MESSAGE
-              </Button>
-            </Block>
-
-            <Block row space="between">
-              <Block middle>
-                <Text
-                  bold
-                  size={12}
-                  color="#525F7F"
-                  style={{ marginBottom: 4 }}
-                >
-                  2K
-                </Text>
-                <Text size={12}>Orders</Text>
-              </Block>
-              <Block middle>
-                <Text bold size={12} style={{ marginBottom: 4 }}>
-                  10
-                </Text>
-                <Text size={12}>Photos</Text>
-              </Block>
-              <Block middle>
-                <Text bold size={12} style={{ marginBottom: 4 }}>
-                  89
-                </Text>
-                <Text size={12}>Comments</Text>
-              </Block>
-            </Block>
-          </Block>
-          <Block flex>
-              <Block middle style={styles.nameInfo}>
-                <Text bold size={28} color="#32325D">
-                  Jessica Jones, 27
-                </Text>
-                <Text size={16} color="#32325D" style={{ marginTop: 10 }}>
-                  San Francisco, USA
-                </Text>
-              </Block>
-              <Block middle style={{ marginTop: 30, marginBottom: 16 }}>
-                <Block style={styles.divider} />
-              </Block>
-              <Block middle>
-                <Text size={16} color="#525F7F" style={{ textAlign: "center" }}>
-                  An artist of considerable range, Jessica name taken by
-                  Melbourne …
-                </Text>
-                <Button
-                  color="transparent"
-                  textStyle={{
-                    color: "#233DD2",
-                    fontWeight: "500",
-                    fontSize: 16
-                  }}
-                >
-                  Show more
-                </Button>
-              </Block>
-              <Block
-                row
-                style={{ paddingVertical: 14, alignItems: "baseline" }}
-              >
-                <Text bold size={16} color="#525F7F">
-                  Album
-                </Text>
-              </Block>
-              <Block
-                row
-                style={{ paddingBottom: 20, justifyContent: "flex-end" }}
-              >
-                <Button
-                  small
-                  color="transparent"
-                  textStyle={{ color: "#5E72E4", fontSize: 12 }}
-                >
-                  View all
-                </Button>
-              </Block>
-              <Block style={{ paddingBottom: -HeaderHeight * 2 }}>
-                <Block row space="between" style={{ flexWrap: "wrap" }}>
-                  {Images.Viewed.map((img, imgIndex) => (
-                    <Image
-                      source={{ uri: img }}
-                      key={`viewed-${img}`}
-                      resizeMode="cover"
-                      style={styles.thumb}
-                    />
-                  ))}
-                </Block>
-              </Block>
-          </Block>
-        </Block>
-                  </ScrollView>*/}
       </Block>
     );
   }
@@ -381,7 +256,7 @@ const styles = StyleSheet.create({
     zIndex: 2
   },
   info: {
-    paddingHorizontal: 40
+    paddingHorizontal: 20
   },
   avatarContainer: {
     position: "relative",
@@ -394,7 +269,7 @@ const styles = StyleSheet.create({
     borderWidth: 0
   },
   nameInfo: {
-    marginTop: 35
+    marginTop: 15
   },
   divider: {
     width: "90%",

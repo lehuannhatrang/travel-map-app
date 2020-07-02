@@ -3,6 +3,7 @@
         "home": {
             "searchBar": "Bạn muốn đi đâu",
             "title": "Trang chính",
+            "criteria": "Điều chỉnh điểm lọc",
             "category": {
                 "restaurant": "Nhà hàng"
             }

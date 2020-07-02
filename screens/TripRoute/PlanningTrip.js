@@ -23,17 +23,41 @@ const { width, height } = Dimensions.get("screen");
 
 const cardWidth = width - theme.SIZES.BASE * 2;
 
-class PlanningTip extends React.Component {
+class PlanningTrip extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
           suggestionRoutes: [],
           routeIndex: 0,
-          loading: true
+          loading: true,
+          travelDate: '',
+          tripsId: '',
+          preferIndex: []
         }
     }
 
     componentDidMount() {
+      const { navigation } = this.props;
+
+      const id = navigation.state.params ? navigation.state.params.id : null;
+
+      if(!!id) {
+        HttpUtil.getJsonAuthorization('/planning-trip', {id})
+        .then(data => {
+          this.setState({
+            travelDate: new Date(data.date),
+            suggestionRoutes: data.recommendRoutes,
+            loading: false,
+            tripsId: data._id,
+            preferIndex: data.userPreferenceRouteIndex
+          })
+        })
+      }
+      else {
+        const travelDate = navigation.state.params ? navigation.state.params.travelDate : null;
+  
+        this.setState({travelDate})
+  
         const defaultPlanning = [
             {
               "id": 0,
@@ -84,14 +108,17 @@ class PlanningTip extends React.Component {
               "category": [9,13,15,14,21,27,28,29,37]
             }
         ]
-
-        HttpUtil.postJsonAuthorization('/planning-trip/suggestion-trips', {planning: defaultPlanning})
+  
+        HttpUtil.postJsonAuthorization('/planning-trip/suggestion-trips', {planning: defaultPlanning, travelDate})
         .then(data => {
           this.setState({
             suggestionRoutes: data.routes,
-            loading: false
+            loading: false,
+            tripsId: data.id
           })
         })
+      }
+
     }
 
     renderScrollDot(index) {
@@ -147,19 +174,47 @@ class PlanningTip extends React.Component {
       return result
     }
 
+    handleLikeTrip(routeIndex) {
+      const { tripsId, preferIndex } = this.state;
+      if(preferIndex.includes(routeIndex)) {
+        HttpUtil.postJsonAuthorization('/planning-trip/unlike', {
+          id: tripsId,
+          index: routeIndex,
+        })
+        .then(data => {
+          const preferIndex = data.preferIndex;
+          this.setState({preferIndex})
+        })
+      } 
+      else {
+        HttpUtil.postJsonAuthorization('/planning-trip/prefer', {
+          id: tripsId,
+          index: routeIndex,
+        })
+        .then(data => {
+          const preferIndex = data.preferIndex;
+          this.setState({preferIndex})
+        })
+      }
+    }
+
     render() {
-      const { suggestionRoutes, routeIndex, loading } = this.state;
-        const { navigation } = this.props; 
-        return (
-          <View style={styles.container}>
+      const { suggestionRoutes, routeIndex, loading, travelDate, preferIndex } = this.state;
+      const { navigation } = this.props; 
+      return (
+        <View style={{flex: 1}}>
+          <Block flex center style={styles.container}>
             <Block flex={1} style={{marginTop: theme.SIZES.BASE / 2 }}>
-              <Block middle style={{marginBottom: 20}}>
-                <Text size={26} color={theme.COLORS.PRIMARY}>We have some plans for you</Text>
+              <Block middle style={{marginBottom: 10}}>
+                {/* <Text size={18} color={theme.COLORS.PRIMARY} bold style={{marginBottom: 10}}>CONGRATULATION!!</Text> */}
+                <Text size={18} color={theme.COLORS.MUTED} style={{marginBottom: 10}}>We have some plans for you</Text>
+                {!!travelDate && <Text size={18} color={theme.COLORS.PRIMARY} bold>{`${travelDate.getDate()}/${travelDate.getMonth()+1}/${travelDate.getFullYear()}`}</Text>}
+
               </Block>
               {!!loading && <ActivityIndicator size="large" color="#0000ff" style={{marginTop: 100, justifySelf: "center"}} />}
               <ScrollView
                 style={{height: "80%"}}
-                onViewableItemsChanged={(viewableItems, changed) => {console.log(viewableItems, changed)}}
+                onViewableItemsChanged={(viewableItems, changed) => {}}
                 horizontal={true}
                 pagingEnabled={true}
                 decelerationRate={0}
@@ -196,29 +251,32 @@ class PlanningTip extends React.Component {
                 ))}
               </ScrollView>
 
-              {!loading && <Block flex={1} row space="around" style={{margin: 0, paddingHorizontal: -10}}>
-                <Button size="small" style={{borderRadius: 0, color: theme.COLORS.PRIMARY}}
-                onPress={() => {
-                  navigation.navigate("TripRouteMapVIew", {route: suggestionRoutes[routeIndex]})
-                }}>
-                  View on Map
-                </Button>
-                <Button size="small" style={{borderRadius: 0}} color='error'>I love it</Button>
-              </Block>}
             </Block>
-          </View>
-        );
+          </Block>
+          {!loading && 
+            <Block row space="around" style={{margin: 0, padding: 0}}>
+              <Button size="small" style={{borderRadius: 0, color: theme.COLORS.PRIMARY, padding: 0, margin: 0}}
+              onPress={() => navigation.navigate("TripRouteMapVIew", {route: suggestionRoutes[routeIndex]}) }>
+                View on Map
+              </Button>
+              <Button size="small" onPress={() => this.handleLikeTrip(routeIndex)}
+              style={{borderRadius: 0, padding: 0, margin: 0}} 
+              disable={preferIndex.includes(routeIndex)}
+              color='error'>{preferIndex.includes(routeIndex) ? "Unlike it" : "I love it"}</Button>
+            </Block>}
+        </View>
+      );
     }
 }
 
-PlanningTip.defaultProps = {
+PlanningTrip.defaultProps = {
     places: []
 }
 
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      margin: 10,
+      marginHorizontal: 10,
       backgroundColor:'white'
     },
     mapStyle: {
@@ -248,4 +306,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default PlanningTip;
+export default PlanningTrip;
