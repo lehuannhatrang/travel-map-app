@@ -12,9 +12,9 @@ import {
   Modal,
   ActivityIndicator
 } from "react-native";
-import { Block, Text, theme } from "galio-framework";
+import { Block, Text, theme, Button as DefaultButton } from "galio-framework";
 import ImageViewer from 'react-native-image-view';
-import { Button, Icon } from "../..//components";
+import { Button, Icon } from "../../components";
 import { Images, argonTheme, articles } from "../../constants";
 import { HeaderHeight } from "../../constants/utils";
 import HttpUtil from "../../utils/Http.util";
@@ -50,6 +50,7 @@ class PlaceDetail extends React.Component {
             placeDetail: '',
             comments: [],
             showAllComment: false,
+            showAllPicture: false
         }
         this.renderFooter = this.renderFooter.bind(this);
     }
@@ -120,8 +121,9 @@ class PlaceDetail extends React.Component {
 
     render() {
         const { navigation } = this.props;
-        const { showPicture, images, chosenPicture, comments, placeDetail, openRatingForm } = this.state;
+        const { showPicture, chosenPicture, comments, placeDetail, openRatingForm, showAllPicture } = this.state;
         if (!placeDetail) return <ActivityIndicator size="large" color="#0000ff" style={{marginTop: 100}} />
+        const images = showAllPicture ? this.state.images : this.state.images.slice(0,3)
         return (
         <Block flex style={styles.profile}>
             <ImageViewer images={images}
@@ -143,7 +145,7 @@ class PlaceDetail extends React.Component {
             >
                 <ScrollView
                 showsVerticalScrollIndicator={false}
-                style={{ width, marginTop: '15%' }}
+                style={{ width, marginTop: '15%', }}
                 >
                 <Block flex style={styles.profileCard}>
                     <Block style={styles.titleInfo}>
@@ -152,16 +154,19 @@ class PlaceDetail extends React.Component {
                             {placeDetail.name}
                             </Text>
                             <Text size={16} color={theme.COLORS.MUTED} style={{ marginTop: 10, textAlign:'center' }}>
-                            {`${placeDetail.streetAddress},`}
+                            {`${placeDetail.streetAddress}`}
                             </Text>
                             <Text size={16} color={theme.COLORS.MUTED} style={{ textAlign:'center' }}>
                             {`${placeDetail.addressLocality}, ${placeDetail.addressRegion}`}
                             </Text>
+                            <Text size={16} color={theme.COLORS.MUTED} style={{ textAlign:'center', marginTop: 10 }}>
+                            {`${i18n.t('PlaceDetail.pricing')}: ${placeDetail.minPrice} - ${placeDetail.maxPrice} (VND)`}
+                            </Text>
                         </Block>
                         <Block middle row space="evenly" style={{ marginTop: 20, paddingBottom: 24 }} >
-                            <Button small style={{ backgroundColor: argonTheme.COLORS.INFO }}>
+                            {/* <Button small style={{ backgroundColor: argonTheme.COLORS.INFO }}>
                                 {i18n.t('PlaceDetail.favoriteButton')}
-                            </Button>
+                            </Button> */}
                             <Button small style={{ backgroundColor: argonTheme.COLORS.DEFAULT }} onPress={() => navigation.navigate('RatingForm', {
                                 place: placeDetail
                             })}>
@@ -207,7 +212,7 @@ class PlaceDetail extends React.Component {
                             </Block>
                         </Block>
                     </Block>
-                    <Block flex>
+                    <Block flex style={{backgroundColor: 'white'}}>
                         <Block middle style={{ marginTop: 40, marginBottom: 30 }}>
                             <Block style={styles.divider} />
                             <Icon
@@ -234,15 +239,17 @@ class PlaceDetail extends React.Component {
                         {!!this.state.showAllComment && comments.map(comment => <Comment showAll={true} key={`cmt-${comment.id}`} comment={comment}/>)}
 
                         <Block row>
-                            <Button
+                            <DefaultButton
                             small
                             color="transparent"
+                            shadowless
+                            style={{borderWidth: 0}}
                             textStyle={{ color: "#5E72E4", fontSize: 16}}
                             onPress={() => this.setState({showAllComment: !this.state.showAllComment})}
                             >
                             {this.state.showAllComment ? i18n.t('PlaceDetail.viewLessComments') : i18n.t('PlaceDetail.viewAllComments')}
-                            {/* {!!this.state.showAllComment && i18n.t('PlaceDetail.viewLessComments')} */}
-                            </Button>
+                            {/* {!!this.state.showAllComment && i18n.t('PlaceDetail.viewLessComments')} */}  
+                            </DefaultButton>
                         </Block>
                         <Block
                         row
@@ -263,6 +270,19 @@ class PlaceDetail extends React.Component {
                                 />
                                 </TouchableOpacity>
                             ))}
+                            </Block>
+                            <Block row>
+                                <DefaultButton
+                                small
+                                color="transparent"
+                                shadowless
+                                style={{borderWidth: 0}}
+                                textStyle={{ color: "#5E72E4", fontSize: 16}}
+                                onPress={() => this.setState({showAllPicture: !this.state.showAllPicture})}
+                                >
+                                {this.state.showAllPicture ? i18n.t('PlaceDetail.viewLessComments') : i18n.t('PlaceDetail.viewAllComments')}
+                                {/* {!!this.state.showAllComment && i18n.t('PlaceDetail.viewLessComments')} */}
+                                </DefaultButton>
                             </Block>
                         </Block>
                     </Block>
@@ -296,6 +316,7 @@ const styles = StyleSheet.create({
         padding: theme.SIZES.BASE,
         marginHorizontal: theme.SIZES.BASE,
         marginTop: 175,
+        height: 'auto',
         borderTopLeftRadius: 6,
         borderTopRightRadius: 6,
         backgroundColor: theme.COLORS.WHITE,
@@ -303,13 +324,14 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 0 },
         shadowRadius: 8,
         shadowOpacity: 0.2,
-        zIndex: 2
+        // zIndex: 2
     },
     info: {
         paddingHorizontal: 40
     },
     titleInfo: {
-        paddingHorizontal: 20
+        paddingHorizontal: 20,
+        backgroundColor: 'white'
     },
     avatarContainer: {
         position: "relative",

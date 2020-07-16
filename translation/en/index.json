@@ -37,6 +37,7 @@
         "viewAllComments": "View all",
         "viewLessComments": "Close",
         "viewLocationButton": "Map",
-        "commentRating": "Rating"
+        "commentRating": "Rating",
+        "pricing": "Price"
     }
 }

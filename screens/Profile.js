@@ -137,7 +137,7 @@ class Profile extends React.Component {
           >
             <ScrollView
               showsVerticalScrollIndicator={false}
-              style={{ width, marginTop: '25%' }}
+              style={styles.scrollView}
             >
               <Block flex style={styles.profileCard}>
                 <Block middle style={styles.avatarContainer}>
@@ -228,6 +228,7 @@ class Profile extends React.Component {
 const styles = StyleSheet.create({
   profile: {
     marginTop: Platform.OS === "android" ? -HeaderHeight : 0,
+    // paddingBottom: 50,
     // marginBottom: -HeaderHeight * 2,
     flex: 1
   },
@@ -282,6 +283,11 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     width: thumbMeasure,
     height: thumbMeasure
+  },
+  scrollView: {
+    width, 
+    marginTop: '25%', 
+    marginBottom: Platform.OS === "android" ? 100 : 0
   }
 });
 

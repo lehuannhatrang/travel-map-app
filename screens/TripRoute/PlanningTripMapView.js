@@ -107,8 +107,8 @@ class TripRouteMapVIew extends React.Component {
             this.setState({currentDestinationIndex: newDestination})
         }
         const focusRegion = {
-            latitude: route.route[currentDestinationIndex].place.latitude,
-            longitude: route.route[currentDestinationIndex].place.longitude,
+            latitude: parseFloat(route.route[currentDestinationIndex].place.latitude),
+            longitude: parseFloat(route.route[currentDestinationIndex].place.longitude),
             latitudeDelta: 0.02,
             longitudeDelta: 0.02,
         }
@@ -117,9 +117,6 @@ class TripRouteMapVIew extends React.Component {
 
     render() {
         const { initialRegion, mapType, route, start, currentDestinationIndex, currentLocation, finish } = this.state;
-        if(!!route) {
-            console.log(route.route[currentDestinationIndex])
-        }
         const { places, navigation } = this.props;
         return (
             <View style={styles.container}>

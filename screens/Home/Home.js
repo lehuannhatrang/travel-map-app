@@ -17,6 +17,12 @@ import HttpUtil from '../../utils/Http.util';
 import Categories from "../../constants/categories";
 import { TabView, SceneMap } from 'react-native-tab-view';
 
+const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+  const paddingToBottom = 30;
+  return layoutMeasurement.height + contentOffset.y >=
+    contentSize.height - paddingToBottom;
+};
+
 class Home extends React.Component {
   constructor(props) {
     super(props);
@@ -27,6 +33,8 @@ class Home extends React.Component {
       chosenCategory: Categories[0].id,
       showCategory: true,
       isLoading: true,
+      isLoadingMore: false,
+      numberShow: 20
     }
     this.offset = 0
     this.getRecommenderPlaces = this.getRecommenderPlaces.bind(this);
@@ -69,7 +77,7 @@ class Home extends React.Component {
       }))
       this.setState({ 
         isLoading: false,
-        places: places.slice(0, 20)
+        places: places
       })
       this.setState({isLoading: false})
     })
@@ -94,14 +102,15 @@ class Home extends React.Component {
       }))
       this.setState({ 
         isLoading: false,
-        places: places.slice(0, 20)
+        places: places
       })
     })
     .catch(err => {})
   }
 
-  handleOnScroll(contentOffsetY) {
-    const { isRefreshing } = this.state;
+  handleOnScroll(nativeEvent) {
+    const contentOffsetY = nativeEvent.contentOffset.y
+    const { isRefreshing, isLoadingMore } = this.state;
     if(contentOffsetY < -63 && !isRefreshing) {
       this.setState({isRefreshing: true})
     } 
@@ -110,6 +119,16 @@ class Home extends React.Component {
         this.setState({isRefreshing: false})
         
       }, 1000);
+    }
+
+    if (!isLoadingMore && isCloseToBottom(nativeEvent)) {
+      this.setState({
+        isLoadingMore: true,
+        numberShow: this.state.numberShow + 10
+      })
+      setTimeout(() => {
+        this.setState({isLoadingMore: false})
+      }, 100)
     }
 
     this.setState({ showCategory: this.offset > contentOffsetY })
@@ -127,17 +146,25 @@ class Home extends React.Component {
     }
   }
 
+  handleShowMore() {
+    console.log('show more')
+  }
+
   renderPlaceList = () => {
     const { navigation } = this.props;
-    const { places, isRefreshing, isLoading } = this.state;
+    const { isRefreshing, isLoading, numberShow, isLoadingMore } = this.state;
+    console.log(numberShow)
+    const places = this.state.places.slice(0, numberShow)
     return (
       <View style={styles.container}>
         <ScrollView
           scrollEventThrottle={10}
-          onScroll={e => this.handleOnScroll(e.nativeEvent.contentOffset.y)}
+          onScroll={e => this.handleOnScroll(e.nativeEvent)}
           refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={() => this.onRefresh()} />}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.articles}>
+          contentContainerStyle={styles.articles}
+          scrollToEnd={() => this.handleShowMore()}
+          >
           <Block flex>
             {!!isLoading && <ActivityIndicator size="large" color="#0000ff" style={{marginTop: 50}} />}
             {!isLoading && places.map(place => (
@@ -150,6 +177,7 @@ class Home extends React.Component {
             {!isLoading && places.length === 0 && <Block middle>
               <Text bold size={24} color={theme.COLORS.MUTED}>Not found</Text>  
             </Block>}
+            {isLoadingMore && <ActivityIndicator size="large" color="#0000ff" style={{marginTop: 50}} />}
           </Block>
         </ScrollView>
       </View>

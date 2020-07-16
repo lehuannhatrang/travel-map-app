@@ -49,7 +49,6 @@ class PickDate extends React.Component {
         .then(location => {
             if(!!location) {
                 const currentLocation = JSON.parse(location)
-                console.log(currentLocation)
                 const newInitRegion = {
                     latitude: currentLocation.coords.latitude,
                     longitude: currentLocation.coords.longitude,
@@ -91,16 +90,19 @@ class PickDate extends React.Component {
                             is24Hour={true}
                             display="default"
                             onChange={(e, date) => {
-                                this.setState({
-                                    chosenDate: date,
-                                })
-                                if(Platform.OS!=='ios') {
+                                console.log(date)
+                                if(!!date){
                                     this.setState({
-                                        showPicker: false
+                                        chosenDate: date,
                                     })
-                                    navigation.navigate('PlanningTrip', {
-                                        travelDate: date
-                                    })
+                                    if(Platform.OS!=='ios') {
+                                        this.setState({
+                                            showPicker: false
+                                        })
+                                        navigation.navigate('PlanningTrip', {
+                                            travelDate: date
+                                        })
+                                    }
                                 }
                             }}
                             />}

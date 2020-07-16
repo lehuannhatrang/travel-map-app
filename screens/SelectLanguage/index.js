@@ -37,9 +37,8 @@ class SelectLanguage extends React.Component {
     render() {
         const { currentLanguage, chosenLanguage } = this.state;
         const disabledButton = currentLanguage === chosenLanguage;
-        console.log(currentLanguage)
         return (
-            <View flex>
+            <View style={{flex: 1}}>
                 <Block style={styles.headerContainer}>
                     <Text color={theme.COLORS.MUTED} size={30}>{i18n.t('SelectLanguage.title')}</Text>
                 </Block>

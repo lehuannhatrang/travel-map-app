@@ -7,7 +7,7 @@ import {
   ScrollView,
   ActivityIndicator,
 } from "react-native";
-import { Block, Checkbox, Text, theme } from "galio-framework";
+import { Block, Checkbox, Text, theme, Button as DefaultButton } from "galio-framework";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import CustomModal from "../../components/Modal";
 import { Button, Icon, Input } from "../../components";
@@ -30,12 +30,14 @@ class Register extends React.Component {
       email: '',
       phone: '',
       password: '',
+      retypePassword: '',
       nameErrorMessage: '',
       emailErrorMessage: '',
       phoneErrorMessage: '',
       isAgreeWithPolicy: false,
       isLoading: false,
-      signupSuccess: false
+      signupSuccess: false,
+      errorMessage: ''
     }
   }
 
@@ -78,12 +80,15 @@ class Register extends React.Component {
 
   handleSignup() {
     const { navigation } = this.props;
-    const {name, email, phone, password, isAgreeWithPolicy} = this.state;
+    const {name, email, phone, password, isAgreeWithPolicy, retypePassword, errorMessage} = this.state;
     if(!name || !email || !phone || !password) {
-      console.log('Failed to signup')
+      this.setState({errorMessage: 'Missing fields'})
     } 
     else if (!isAgreeWithPolicy) {
-      console.log('Please agree with policy')
+      this.setState({errorMessage: 'Please agree with the privacy policy'})
+    }
+    else if(retypePassword !== password) {
+      this.setState({errorMessage: 'Password does not match'})
     }
     else {
       this.setState({isLoading: true})
@@ -114,7 +119,8 @@ class Register extends React.Component {
 
   render() {
     const { navigation } = this.props;
-    const { isLoading, passwordStrength, nameErrorMessage, emailErrorMessage, phoneErrorMessage, signupSuccess } = this.state;
+    const { isLoading, passwordStrength, nameErrorMessage, emailErrorMessage, phoneErrorMessage, 
+            signupSuccess, password, retypePassword, errorMessage } = this.state;
     return (
       <Block flex middle>
         <StatusBar hidden />
@@ -161,6 +167,9 @@ class Register extends React.Component {
                   <Block flex={0.1} middle>
                     <Text color="#8898AA" size={12}>
                       Or sign up the classical way
+                    </Text>
+                    <Text color="red">
+                      {errorMessage}
                     </Text>
                   </Block>
                   <Block flex center>
@@ -255,6 +264,22 @@ class Register extends React.Component {
                               />
                             }
                           />
+                          <Input
+                            password
+                            borderless
+                            placeholder="Retype password"
+                            onChangeText={value => this.setState({retypePassword:value})}
+                            iconContent={
+                              <Icon
+                                size={16}
+                                color={argonTheme.COLORS.ICON}
+                                name={retypePassword === password ? 'checkcircle' : 'closecircle'}
+                                family="AntDesign"
+                                style={styles.inputIcons}
+                              />
+                            }
+                          />
+                          
                           <Block row style={styles.passwordCheck}>
                             <Text size={12} color={argonTheme.COLORS.MUTED}>
                               password strength:
@@ -276,8 +301,9 @@ class Register extends React.Component {
                         color={argonTheme.COLORS.PRIMARY}
                         label="I agree with the"
                       />
-                      <Button
+                      <DefaultButton
                         style={{ width: 100, borderWidth: 0 }}
+                        shadowless
                         color="transparent"
                         textStyle={{
                           color: argonTheme.COLORS.PRIMARY,
@@ -286,7 +312,7 @@ class Register extends React.Component {
                         onPress={() => Linking.openURL("https://guidy.flycricket.io/privacy.html")}
                       >
                         Privacy Policy
-                      </Button>
+                      </DefaultButton>
                     </Block>
                     <Block middle>
                       <Button disabled={isLoading} color={signupSuccess ? "success" : "primary"} style={styles.createButton} onPress={() => this.handleSignup()}>
