@@ -29,6 +29,7 @@ export default {
     WHITE: '#FFFFFF',
     BLACK: '#000000',
     YELLOW: '#CECA59',
-    OCEAN: "#00cccc"
+    OCEAN: "#00cccc",
+    UNLIKE: '#EE6969',
   }
 };

@@ -16,6 +16,7 @@ import { Block, Checkbox, Text, theme, Card } from "galio-framework";
 
 import { Button, Icon, Input } from "../../components";
 import { argonTheme } from "../../constants";
+import MapViewDirections from 'react-native-maps-directions';
 import i18n from 'i18n-js';
 import Header from "../../components/Header";
 
@@ -38,6 +39,7 @@ class ViewOnMap extends React.Component {
             mapType: 'standard',
             placeDetail: '',
             placeCoords: '',
+            currentLocation: ''
         }
     }
 
@@ -63,6 +65,17 @@ class ViewOnMap extends React.Component {
         } else {
 
         }
+
+        AsyncStorage.getItem('currentLocation')
+        .then(location => {
+            if(!!location) {
+                const currentLocation = JSON.parse(location)
+                this.setState({currentLocation: {
+                    latitude: currentLocation.coords.latitude,
+                    longitude: currentLocation.coords.longitude,
+                }})
+            }
+        })
     }
     
     movingCurrentLocation() {
@@ -85,7 +98,7 @@ class ViewOnMap extends React.Component {
 
     render() {
         const { navigation } = this.props;
-        const { initialRegion, mapType, placeDetail, placeCoords, animateToRegion } = this.state;
+        const { initialRegion, mapType, placeDetail, placeCoords, animateToRegion, currentLocation } = this.state;
         if(!initialRegion) return (
             <View style={styles.container}>
                 <ActivityIndicator size="large" color="#0000ff" style={{marginTop: 100}} />
@@ -103,6 +116,13 @@ class ViewOnMap extends React.Component {
                     title={placeDetail.name} description={placeDetail.address}>
                         <Image source={require('../../assets/imgs/pin_icon.png')} style={{height: 35, width:35 }} />
                     </Marker>
+                    <MapViewDirections
+                        origin={currentLocation}
+                        destination={placeCoords}
+                        apikey={'AIzaSyCNlPrpNK1ZqynQJJcdDwiowCzS_AViU-Q'}
+                        strokeWidth={5}
+                        strokeColor={"#E998A1"}
+                    />
                 </MapView>
                 <Button onlyIcon icon="my-location" iconFamily="MaterialIcons" iconSize={30} color="white" 
                 iconColor="black" style={styles.currentLocationButton} onPress={() => this.movingCurrentLocation()}>

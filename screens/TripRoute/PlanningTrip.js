@@ -153,14 +153,16 @@ class PlanningTrip extends React.Component {
                resizeMode="cover"
                style={styles.placeAvatar}
                />
-               <Text bold color="#525F7F" style={{marginLeft: 5, flex: 1, flexWrap: 'wrap', marginTop: 5}}>{place.place.name}</Text>
+               <Block style={{flex: 1, marginLeft: 5}}>
+                <Text bold color="#525F7F" style={{flexWrap: 'wrap', marginTop: 5, fontSize: 15}}>{place.place.name}</Text>
+                <Block style={{marginTop: 5}}>
+                    <Text color="#525F7F">{place.place.streetAddress}</Text>
+                </Block>
+                <Block style={{marginTop: 5}}>
+                    <Text color="#525F7F">{place.place.addressLocality}</Text>
+                  </Block>
+               </Block>
            </Block>
-           <Block row style={{marginTop: 5}}>
-              <Text color="#525F7F">{place.place.streetAddress}</Text>
-           </Block>
-           <Block row>
-              <Text color="#525F7F">{place.place.addressLocality}</Text>
-            </Block>
        </TouchableOpacity>
       }))
       return timelineData
@@ -206,63 +208,70 @@ class PlanningTrip extends React.Component {
           <Block flex center style={styles.container}>
             <Block flex={1} style={{marginTop: theme.SIZES.BASE / 2 }}>
               <Block middle style={{marginBottom: 10}}>
-                {/* <Text size={18} color={theme.COLORS.PRIMARY} bold style={{marginBottom: 10}}>CONGRATULATION!!</Text> */}
-                <Text size={18} color={theme.COLORS.MUTED} style={{marginBottom: 10}}>We have some plans for you</Text>
-                {!!travelDate && <Text size={18} color={theme.COLORS.PRIMARY} bold>{`${travelDate.getDate()}/${travelDate.getMonth()+1}/${travelDate.getFullYear()}`}</Text>}
-
+                <Text size={18} color={theme.COLORS.MUTED} style={{marginBottom: 10}}>We have some plans for you on</Text>
+                {!!travelDate && <Text size={18} color={"#7875D3"} bold>{`${travelDate.getDate()}/${travelDate.getMonth()+1}/${travelDate.getFullYear()}`}</Text>}
               </Block>
               {!!loading && <ActivityIndicator size="large" color="#0000ff" style={{marginTop: 100, justifySelf: "center"}} />}
-              <ScrollView
-                style={{height: "80%"}}
-                onViewableItemsChanged={(viewableItems, changed) => {}}
-                horizontal={true}
-                pagingEnabled={true}
-                decelerationRate={0}
-                overScrollMode="never"
-                scrollEventThrottle={16}
-                snapToAlignment="center"
-                onScroll={e => this.setState({routeIndex: this.getPageIndex(e.nativeEvent.contentOffset.x, width) })}
-                showsHorizontalScrollIndicator={false}
-                // snapToInterval={cardWidth + theme.SIZES.BASE * 0.375}
-                snapToInterval={width}
-                contentContainerStyle={{
-                  width: width*3,
-                  // paddingHorizontal: theme.SIZES.BASE / 2
-                  padding: 0
-                }}
-              > 
-                {!loading && suggestionRoutes.map((route, index) => (
-                    <Timeline 
-                      key={`timeline-${index}`}
-                      style={styles.timeline}
-                      data={this.convertTimelineData(route)}
-                      circleSize={20}
-                      circleColor='rgba(0,0,0,0)'
-                      // circleColor='rgb(45,156,219)'
-                      // lineColor='rgb(45,156,219)'
-                      timeContainerStyle={{minWidth:52}}
-                      timeStyle={{textAlign: 'center', backgroundColor: theme.COLORS.PRIMARY, color:'white', padding:5, borderRadius:13}}
-                      descriptionStyle={{color:'gray'}}
-                      options={{
-                        style:{}
-                      }}
-                      innerCircle={'icon'}
-                    />
-                ))}
-              </ScrollView>
-
+              <View style={{flex: 1, position: 'relative'}}>
+                {!loading && <View style={styles.paging}>
+                  <Text style={styles.pagingText}>{`${routeIndex+1} / 3`}</Text>
+                </View>}
+                <ScrollView
+                  style={{height: "80%"}}
+                  onViewableItemsChanged={(viewableItems, changed) => {}}
+                  horizontal={true}
+                  pagingEnabled={true}
+                  decelerationRate={0}
+                  overScrollMode="never"
+                  scrollEventThrottle={16}
+                  snapToAlignment="center"
+                  onScroll={e => this.setState({routeIndex: this.getPageIndex(e.nativeEvent.contentOffset.x, width) })}
+                  showsHorizontalScrollIndicator={false}
+                  // snapToInterval={cardWidth + theme.SIZES.BASE * 0.375}
+                  snapToInterval={width}
+                  contentContainerStyle={{
+                    width: width*3,
+                    // paddingHorizontal: theme.SIZES.BASE / 2
+                    padding: 0
+                  }}
+                > 
+                  {!loading && suggestionRoutes.map((route, index) => (
+                      <Timeline 
+                        key={`timeline-${index}`}
+                        style={styles.timeline}
+                        data={this.convertTimelineData(route)}
+                        circleSize={20}
+                        circleColor='rgba(0,0,0,0)'
+                        // circleColor='rgb(45,156,219)'
+                        lineColor='rgba(45,156,219, 0.9)'
+                        lineWidth={1}
+                        renderFullLine={true}
+                        timeContainerStyle={{minWidth:52}}
+                        titleStyle={{fontSize: 20, paddingBottom: 5}}
+                        timeStyle={styles.timeStyle}
+                        descriptionStyle={{color:'gray'}}
+                        options={{
+                          style:{}
+                        }}
+                        innerCircle={'icon'}
+                      />
+                  ))}
+                </ScrollView>
+              </View>
             </Block>
           </Block>
           {!loading && 
             <Block row space="around" style={{margin: 0, padding: 0}}>
-              <Button size="small" style={{borderRadius: 0, color: theme.COLORS.PRIMARY, padding: 0, margin: 0}}
+              <Button size="small" style={{borderRadius: 0, padding: 0, margin: 0}}
               onPress={() => navigation.navigate("TripRouteMapVIew", {route: suggestionRoutes[routeIndex]}) }>
                 View on Map
               </Button>
               <Button size="small" onPress={() => this.handleLikeTrip(routeIndex)}
               style={{borderRadius: 0, padding: 0, margin: 0}} 
               disable={preferIndex.includes(routeIndex)}
-              color='error'>{preferIndex.includes(routeIndex) ? "Unlike it" : "I love it"}</Button>
+              color={preferIndex.includes(routeIndex) ? 'unlike' : 'error'}>
+                {preferIndex.includes(routeIndex) ? "Unlike it" : "I love it"}
+              </Button>
             </Block>}
         </View>
       );
@@ -294,16 +303,38 @@ const styles = StyleSheet.create({
       shadowOpacity: 0.2,
       backgroundColor: 'white'
     },
+    timeStyle: {
+      textAlign: 'center', 
+      backgroundColor: "#7875D3", 
+      color: 'white', 
+      padding: 5, 
+      borderRadius: 13,
+      marginTop: 5
+    },
     productImage: {
       width: cardWidth - theme.SIZES.BASE,
       height: cardWidth - theme.SIZES.BASE,
       borderRadius: 3
     },
     placeAvatar: {
-        height: 30,
-        width: 30,
-        borderRadius: 15,
+      height: 40,
+      width: 40,
+      borderRadius: 20,
     },
+    paging: {
+      position: 'absolute',
+      zIndex: 100,
+      top: -10,
+      right: 10,
+      backgroundColor: "#CDC1BE", 
+      paddingHorizontal: 8,
+      paddingVertical: 3, 
+      borderRadius: 8,
+    },
+    pagingText: {
+      fontSize: 15,
+      color: 'white', 
+    }
 });
 
 export default PlanningTrip;

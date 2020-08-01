@@ -34,12 +34,12 @@ const defaultInitalRegion = {
 class PickDate extends React.Component {
     constructor(props) {
         super(props);
+        const today = new Date();
         this.state = {
             initialRegion: '',
             mapType: 'standard',
-            chosenDate: new Date(),
             mode: 'date',
-            chosenDate: new Date(),
+            chosenDate: new Date(today.getTime() + (24 * 60 * 60 * 1000)),
             showPicker: true
         }
     }

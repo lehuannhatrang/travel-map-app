@@ -28,9 +28,54 @@ class SearchLocation extends React.Component {
         },
         {
           id: 2,
-          region:'Hà Nội',
-          country: 'Việt Nam'
-        }
+          region:'Quận 1',
+          country: 'HCM'
+        },
+        {
+          id: 3,
+          region:'Quận 2',
+          country: 'HCM'
+        },
+        {
+          id: 4,
+          region:'Quận 3',
+          country: 'HCM'
+        },
+        {
+          id: 5,
+          region:'Quận 4',
+          country: 'HCM'
+        },
+        {
+          id: 6,
+          region:'Quận 5',
+          country: 'HCM'
+        },
+        {
+          id: 7,
+          region:'Quận 6',
+          country: 'HCM'
+        },
+        {
+          id: 8,
+          region:'Quận 7',
+          country: 'HCM'
+        },
+        {
+          id: 9,
+          region:'Quận 10',
+          country: 'HCM'
+        },
+        {
+          id: 10,
+          region:'Quận 11',
+          country: 'HCM'
+        },
+        {
+          id: 11,
+          region:'Quận 12',
+          country: 'HCM'
+        },
       ],
       locationInput: '',
       currentLocation: '',
